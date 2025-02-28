@@ -161,7 +161,6 @@ def parquet2vcf(
     if genotypes_path and format_str:
         genotypes = Genotypes(polars.scan_parquet(genotypes_path))
         vcf.add_genotypes(genotypes)
-
         sample2vcf_col2polars_col: dict[str, dict[str, str]] = {}
         for sample in genotypes.samples_names():
             sample2vcf_col2polars_col[sample] = {}
