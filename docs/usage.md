@@ -351,6 +351,8 @@ except variantplaner.exception.NoContigsLengthInformationError:
 lf = vcf.lf.with_columns(vcf.header.info_parser())
 lf = lf.drop(["chr", "pos", "ref", "alt", "filter", "qual", "info"])
 lf = lf.rename({"vid": "id"})
+lf = lf.explode("ANN")
+lf = lf.cast({"id": polars.UInt64})
 
 lf = lf.with_columns(
     [
