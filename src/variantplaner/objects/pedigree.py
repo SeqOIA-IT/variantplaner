@@ -57,7 +57,7 @@ class Pedigree(polars.LazyFrame):
         Returns:
             None
         """
-        self.lf.collect().write_csv(output_path, include_header=False, separator="\t")
+        self.lf.collect(engine="cpu").write_csv(output_path, include_header=False, separator="\t")
 
     @classmethod
     def minimal_schema(

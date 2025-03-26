@@ -9,7 +9,7 @@ import logging
 import polars
 
 # project import
-from variantplaner_rs import VariantId  # noqa: F401 ruff miss this import is use
+from variantid import variant_id  # type: ignore[attr-defined]
 
 logger = logging.getLogger("normalization")
 
@@ -34,7 +34,7 @@ def add_variant_id(lf: polars.LazyFrame, chrom2length: polars.LazyFrame) -> pola
     Returns:
         [polars.LazyFrame](https://pola-rs.github.io/polars/py-polars/html/reference/lazyframe/index.html) with chr column normalized
     """
-    real_pos_max = chrom2length.select([polars.col("length").sum()]).collect().get_column("length").max()
+    real_pos_max = chrom2length.select([polars.col("length").sum()]).collect(engine="cpu").get_column("length").max()
 
     large_variant_len = (64 - len(format(real_pos_max, "b")) - 2) // 2 + 1
 
@@ -65,9 +65,10 @@ def add_variant_id(lf: polars.LazyFrame, chrom2length: polars.LazyFrame) -> pola
     lf = lf.with_columns(real_pos=polars.col("pos") + polars.col("offset"))
 
     lf = lf.with_columns(
-        id=polars.col("real_pos").variant_id.compute(  # type: ignore # noqa: PGH003
-            polars.col("ref"),
-            polars.col("alt"),
+        id=variant_id.compute_id(
+            "real_pos",
+            "ref",
+            "alt",
             real_pos_max,
         ),
     )
@@ -86,4 +87,4 @@ def add_id_part(lf: polars.LazyFrame, number_of_bits: int = 8) -> polars.LazyFra
     Returns:
         [polars.LazyFrame](https://pola-rs.github.io/polars/py-polars/html/reference/lazyframe/index.html) with column id_part added
     """
-    return lf.with_columns(id_part=polars.col("id").variant_id.partition(number_of_bits=number_of_bits))  # type: ignore # noqa: PGH003
+    return lf.with_columns(id_part=variant_id.compute_part("id", number_of_bits=number_of_bits))

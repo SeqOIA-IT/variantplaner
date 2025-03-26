@@ -122,7 +122,7 @@ def variants(
     try:
         variants.sink_parquet(output_path, maintain_order=False)
     except polars.exceptions.InvalidOperationError:
-        variants.collect(streaming=True).write_parquet(output_path)
+        variants.collect(engine="cpu").write_parquet(output_path)
     logger.info(f"End write variants in {output_path}")
 
 
@@ -169,7 +169,7 @@ def genotypes(
     try:
         genotypes_data.lf.sink_parquet(output_path, maintain_order=False)
     except polars.exceptions.InvalidOperationError:
-        genotypes_data.lf.collect(streaming=True).write_parquet(output_path)
+        genotypes_data.lf.collect(engine="cpu").write_parquet(output_path)
     logger.info(f"End write genotypes in {output_path}")
 
 
@@ -226,7 +226,7 @@ def annotations_subcommand(
     try:
         annotations_data.sink_parquet(output_path, maintain_order=False)
     except polars.exceptions.InvalidOperationError:
-        annotations_data.collect(streaming=True).write_parquet(output_path)
+        annotations_data.collect(engine="cpu").write_parquet(output_path)
     logger.info(f"End write annotations in {output_path}")
 
 
