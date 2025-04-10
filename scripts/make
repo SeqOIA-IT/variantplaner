@@ -60,6 +60,7 @@ def setup() -> None:
             print(f"\nInstalling dependencies (python{version})")  # noqa: T201
             venv_path = Path(f".venvs/{version}")
             if not venv_path.exists():
+                print(f"uv venv --python {version} {venv_path}")
                 shell(f"uv venv --python {version} {venv_path}")
             with environ(UV_PROJECT_ENVIRONMENT=str(venv_path.resolve())):
                 uv_install(venv_path)

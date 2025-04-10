@@ -77,7 +77,7 @@ class ContigsLength:
 
         self.__compute_offset()
 
-        return self.lf.collect().shape[0]
+        return self.lf.collect(engine="cpu").shape[0]
 
     def __compute_offset(self) -> None:
         self.lf = self.lf.with_columns(offset=polars.col("length").cum_sum() - polars.col("length"))

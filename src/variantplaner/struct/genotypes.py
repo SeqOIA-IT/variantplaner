@@ -41,7 +41,7 @@ def __hive_worker(
 
     lf = normalization.add_id_part(polars.concat(lf for lf in lfs if lf is not None), number_of_bits=number_of_bits)
 
-    for (part_name, *_), df in lf.collect().group_by(polars.col("id_part")):
+    for (part_name, *_), df in lf.collect(engine="cpu").group_by(polars.col("id_part")):
         df.write_parquet(output_prefix / f"id_part={part_name}" / f"{basename}.parquet")
 
 

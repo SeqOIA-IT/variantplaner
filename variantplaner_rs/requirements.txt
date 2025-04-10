@@ -1,2 +1,0 @@
-maturin[patchelf]
-polars>=0.20.31

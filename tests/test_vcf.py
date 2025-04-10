@@ -31,9 +31,9 @@ def test_chrom2length_overide_vcf_contig() -> None:
     obj = Vcf()
     obj.from_path(vcf_path, None)
 
-    assert obj.lf.null_count().collect().get_column("id").to_list() == [1]
+    assert obj.lf.filter(polars.col("id") == pow(2, 64)-1).collect().height == 1
 
     obj = Vcf()
     obj.from_path(vcf_path, DATA_DIR / "grch38.92.csv")
 
-    assert obj.lf.null_count().collect().get_column("id").to_list() == [0]
+    assert obj.lf.filter(polars.col("id") == pow(2, 64)-1).collect().height == 0

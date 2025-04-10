@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.4.0](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.4.0) - 2025-04-10
+
+<small>[Compare with 0.3.1](https://github.com/SeqOIA-IT/variantplaner/compare/0.3.1...0.4.0)</small>
+
+### Bug Fixes
+
+- genotype samples_names perform unique sample ([64e7274](https://github.com/SeqOIA-IT/variantplaner/commit/64e7274f525eb9da0dd611566c3b3db5bd9d5f17) by Pierre Marijon).
+- improve struct variant tmp file naming ([3119a40](https://github.com/SeqOIA-IT/variantplaner/commit/3119a407c76d4f3a7d71938126c6dc92fa8ee8ed) by Pierre Marijon).
+
+### Code Refactoring
+
+- rename variantplaner_rs in variantid and rewrite it ([3961428](https://github.com/SeqOIA-IT/variantplaner/commit/3961428f3163f35b79e21f2573b3007ac364af9e) by Pierre Marijon).
+
 ## [0.3.1](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.3.1) - 2024-12-16
 
 <small>[Compare with 0.3.1](https://github.com/SeqOIA-IT/variantplaner/compare/0.3.0...0.3.1)</small>

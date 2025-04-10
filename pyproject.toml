@@ -28,11 +28,11 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "polars>=1,<1.23",
-    "polars-u64-idx>=1",
+    "polars==1.23.0",
+    "polars-u64-idx==1.23.0",
     "click>=8",
     "typing-extensions>=4",
-    "variantplaner-rs @ file:///${PROJECT_ROOT}/variantplaner_rs",
+    "variantid @ file:///${PROJECT_ROOT}/variantid/variantid",
 ]
 
 [project.urls]

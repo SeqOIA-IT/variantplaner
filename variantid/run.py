@@ -1,5 +1,6 @@
 import polars
-from variantplaner_rs import VariantId
+
+from variantid import variant_id
 
 df = polars.DataFrame(
     data={
@@ -17,25 +18,22 @@ df = polars.DataFrame(
 lf = df.lazy()
 
 lf = lf.with_columns(
-    id = polars.col("real_pos")
-    .variant_id.compute(
-        polars.col("ref"),
-        polars.col("alt"),
-        polars.lit(120)
-        .cast(polars.UInt64)
+    id = variant_id.compute_id(
+        "real_pos",
+        "ref",
+        "alt",
+        120
     )
 )
 
 lf = lf.with_columns(
-    part = polars.col("id")
-    .variant_id.partition(8)
+    part = variant_id.compute_part("id", number_of_bits=8)
 )
 
 print(lf.collect())
 
 lf = lf.with_columns(
-    part = polars.col("id")
-    .variant_id.partition(9)
+    part = variant_id.compute_part("id", number_of_bits=9)
 )
 
 print(lf.collect())
