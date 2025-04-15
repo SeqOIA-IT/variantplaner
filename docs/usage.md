@@ -177,7 +177,7 @@ mkdir -p genotypes/variants/
 variantplaner -t 8 struct -i genotypes/samples/*.parquet -- genotypes -p genotypes/variants
 ```
 
-All genotypes information are split in [hive like structure](https://duckdb.org/docs/data/partitioning/hive_partitioning) to optimize request on data.
+All genotypes information are split in [hive like structure](https://duckdb.org/docs/data/partitioning/hive_partitioning) to optimize request on data, `--` after last input path are mandatory.
 
 ### Compute transmission mode
 
