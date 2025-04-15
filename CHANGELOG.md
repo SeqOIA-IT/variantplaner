@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.4.2](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.4.2) - 2025-04-15
+
+<small>[Compare with 0.4.1](https://github.com/SeqOIA-IT/variantplaner/compare/0.4.1...0.4.2)</small>
+
+### Features
+
+- support compressed vcf with xopen ([3310947](https://github.com/SeqOIA-IT/variantplaner/commit/3310947fd8013740739894a642f9c8517b434993))
+
+### Bug Fixes
+
+- remove debug instruction ([dd93d54](https://github.com/SeqOIA-IT/variantplaner/commit/dd93d5441f84c8051d25a35fb5443acca3426f5a) by Pierre Marijon).
+
 ## [0.4.1](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.4.1) - 2025-04-15
 
 <small>[Compare with 0.4.0](https://github.com/SeqOIA-IT/variantplaner/compare/0.4.0...0.4.1)</small>
