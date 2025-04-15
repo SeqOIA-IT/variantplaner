@@ -3,13 +3,18 @@
 from __future__ import annotations
 
 import os
+import re
 import sys
+from contextlib import contextmanager
+from importlib.metadata import version as pkgversion
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 from duty import duty, tools
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from duty.context import Context
 
 PY_SRC_PATHS = (Path(_) for _ in ("src", "tests", "benchmark", "duties.py", "scripts"))
@@ -21,11 +26,29 @@ PTY = not WINDOWS and not CI
 MULTIRUN = os.environ.get("MULTIRUN", "0") == "1"
 
 
-def pyprefix(title: str) -> str:  # noqa: D103
+def pyprefix(title: str) -> str:
     if MULTIRUN:
         prefix = f"(python{sys.version_info.major}.{sys.version_info.minor})"
         return f"{prefix:14}{title}"
     return title
+
+
+@contextmanager
+def material_insiders() -> Iterator[bool]:
+    if "+insiders" in pkgversion("mkdocs-material"):
+        os.environ["MATERIAL_INSIDERS"] = "true"
+        try:
+            yield True
+        finally:
+            os.environ.pop("MATERIAL_INSIDERS")
+    else:
+        yield False
+
+
+def _get_changelog_version() -> str:
+    changelog_version_re = re.compile(r"^## \[(\d+\.\d+\.\d+)\].*$")
+    with Path(__file__).parent.joinpath("CHANGELOG.md").open("r", encoding="utf8") as file:
+        return next(filter(bool, map(changelog_version_re.match, file))).group(1)  # type: ignore[union-attr]
 
 
 @duty
@@ -36,6 +59,7 @@ def changelog(ctx: Context, bump: str = "") -> None:
         ctx: The context instance (passed automatically).
     """
     ctx.run(tools.git_changelog(bump=bump or None), title="Updating changelog")
+    ctx.run(tools.yore.check(bump=bump or _get_changelog_version()), title="Checking legacy code")
 
 
 @duty(pre=["check-quality", "check-types", "check-docs", "check-api"])
@@ -78,11 +102,8 @@ def check_docs(ctx: Context) -> None:
 
 @duty
 def check_types(ctx: Context) -> None:
-    """Check that the code is correctly typed.
-
-    Parameters:
-        ctx: The context instance (passed automatically).
-    """
+    """Check that the code is correctly typed."""
+    os.environ["FORCE_COLOR"] = "1"
     ctx.run(
         tools.mypy(*PY_SRC_LIST, config_file="config/mypy.ini"),
         title=pyprefix("Type-checking"),
@@ -119,7 +140,7 @@ def clean(ctx: Context) -> None:
     ctx.run("find . -name '*.rej' -delete")
 
 
-@duty
+@duty(post=["docs_build"])
 def docs(ctx: Context) -> None:
     """Check if the documentation builds correctly."""
     ctx.run(
@@ -129,6 +150,13 @@ def docs(ctx: Context) -> None:
 
 
 @duty
+def docs_build(ctx: Context) -> None:
+    """Deploy the documentation to GitHub pages."""
+    with material_insiders():
+        ctx.run(tools.mkdocs.build(), title="Build documentation")
+
+
+@duty(post=["docs_build"])
 def docs_deploy(ctx: Context) -> None:
     """Deploy the documentation on GitHub pages.
 

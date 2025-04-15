@@ -13,7 +13,6 @@ import click
 import polars
 
 # project import
-from variantplaner import debug
 
 
 class MultipleValueOption(click.Option):
@@ -75,13 +74,6 @@ class MultipleValueOption(click.Option):
     show_default=True,
 )
 @click.option("-v", "--verbose", help="Verbosity level", count=True, type=click.IntRange(0, 4))
-@click.option(
-    "--debug-info",
-    help="Get debug information",
-    is_flag=True,
-    show_default=True,
-    default=False,
-)
 def main(ctx: click.Context, *, threads: int = 1, verbose: int = 0, debug_info: bool = False) -> None:
     """Run VariantPlanner."""
     logging.basicConfig(
@@ -95,10 +87,6 @@ def main(ctx: click.Context, *, threads: int = 1, verbose: int = 0, debug_info: 
     logger = logging.getLogger("main")
 
     logger.debug(f"parameter: {threads=} {verbose=} {debug_info=}")
-
-    if debug_info:
-        debug.print_info()
-        sys.exit(0)
 
     ctx.obj = {
         "threads": threads,

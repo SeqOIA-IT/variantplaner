@@ -1,4 +1,4 @@
-"""Tests for cli."""
+"""Tests for the CLI."""
 
 # std import
 from __future__ import annotations

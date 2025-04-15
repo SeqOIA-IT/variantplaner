@@ -1,11 +1,11 @@
 site_name: "variantplaner"
 site_description: "A tool kit to manage many variant on desktop computer"
-site_url: "https://seqoia-it.github.io/variantplaner"
+site_url: "https://SeqOIA-IT.github.io/variantplaner"
 repo_url: "https://github.com/SeqOIA-IT/variantplaner"
 repo_name: "SeqOIA-IT/variantplaner"
 site_dir: "site"
 watch: [mkdocs.yml, README.md, CONTRIBUTING.md, CHANGELOG.md, src/variantplaner]
-copyright: Copyright &copy; 2024 Pierre Marijon
+copyright: Copyright &copy; 2025 GCS SeqOIA
 edit_uri: edit/main/docs/
 
 validation:
@@ -14,40 +14,37 @@ validation:
   unrecognized_links: warn
 
 nav:
-  - Home:
-      - Overview: index.md
-      - Usage: usage.md
-      - Changelog: changelog.md
-      - Credits: credits.md
-      - License: license.md
-  # defer to gen-files + literate-nav
-  - API reference:
-      - variantplaner: reference/
-  - Development:
-      - Contributing: contributing.md
-      - Code of Conduct: code_of_conduct.md
-      - Coverage report: coverage.md
-      - Benchmark: benchmark.md
+- Home:
+  - Overview: index.md
+  - Changelog: changelog.md
+  - Credits: credits.md
+  - License: license.md
+- API reference: reference/api.md
+- Development:
+  - Contributing: contributing.md
+  - Code of Conduct: code_of_conduct.md
+  - Coverage report: coverage.md
 
 theme:
   name: material
   custom_dir: docs/.overrides
   features:
-    - announce.dismiss
-    - content.action.edit
-    - content.action.view
-    - content.code.annotate
-    - content.code.copy
-    - content.tooltips
-    - navigation.footer
-    - navigation.indexes
-    - navigation.sections
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - navigation.top
-    - search.highlight
-    - search.suggest
-    - toc.follow
+  - announce.dismiss
+  - content.action.edit
+  - content.action.view
+  - content.code.annotate
+  - content.code.copy
+  - content.tooltips
+  - navigation.footer
+  - navigation.instant.preview
+  - navigation.path
+  - navigation.sections
+  - navigation.tabs
+  - navigation.tabs.sticky
+  - navigation.top
+  - search.highlight
+  - search.suggest
+  - toc.follow
   palette:
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
@@ -97,22 +94,20 @@ markdown_extensions:
 plugins:
 - autorefs
 - search
+- autorefs
 - markdown-exec
-- gen-files:
-    scripts:
-    - scripts/gen_ref_nav.py
-- literate-nav:
-    nav_file: SUMMARY.md
+- section-index
 - coverage
 - mkdocstrings:
     handlers:
       python:
-        import:
+        inventories:
         - https://docs.python.org/3/objects.inv
         - https://pola-rs.github.io/polars/py-polars/html/objects.inv
         - https://click.palletsprojects.com/en/8.1.x/objects.inv
         paths: [src]
         options:
+          backlinks: tree
           docstring_options:
             ignore_init_summary: true
           docstring_section_style: list

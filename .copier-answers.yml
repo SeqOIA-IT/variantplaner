@@ -1,13 +1,13 @@
-# Changes here will be overwritten by Copier
-_commit: 1.5.2
+# Changes here will be overwritten by Copier.
+_commit: 1.8.4
 _src_path: gh:pawamoy/copier-uv
 author_email: pierre.marijon-ext@aphp.fr
 author_fullname: Pierre Marijon
 author_username: natir
-copyright_date: '2024'
-copyright_holder: Pierre Marijon
+copyright_date: '2025'
+copyright_holder: GCS SeqOIA
 copyright_holder_email: pierre.marijon-ext@aphp.fr
-copyright_license: MIT License
+copyright_license: MIT
 insiders: false
 project_description: A tool kit to manage many variant on desktop computer
 project_name: variantplaner
@@ -15,6 +15,6 @@ python_package_command_line_name: variantplaner
 python_package_distribution_name: variantplaner
 python_package_import_name: variantplaner
 repository_name: variantplaner
-repository_namespace: natir
+repository_namespace: SeqOIA-IT
 repository_provider: github.com
 

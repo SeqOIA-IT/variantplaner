@@ -28,7 +28,6 @@ def test_show_help() -> None:
 Options:
   -t, --threads INTEGER RANGE  Number of threads usable  [default: 1; x>=0]
   -v, --verbose                Verbosity level  [0<=x<=4]
-  --debug-info                 Get debug information
   -h, --help                   Show this message and exit.
 
 Commands:

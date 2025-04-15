@@ -38,5 +38,8 @@ jobs:
         enable-cache: true
         cache-dependency-glob: pyproject.toml
 
+    - name: Setup dev env
+      run: make setup
+
     - name: Deploy documentation
       run: make docs-deploy

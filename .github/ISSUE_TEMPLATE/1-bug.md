@@ -50,7 +50,7 @@ PASTE TRACEBACK HERE
      redacting sensitive information. -->
 
 ```bash
-variantplaner --debug-info  # | xclip -selection clipboard
+variantplaner --version  # | xclip -selection clipboard
 ```
 
 PASTE MARKDOWN OUTPUT HERE

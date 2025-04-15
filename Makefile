@@ -10,6 +10,7 @@ actions = \
 	clean \
 	coverage \
 	docs \
+	docs-build \
 	docs-deploy \
 	format \
 	help \

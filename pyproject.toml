@@ -6,7 +6,8 @@ build-backend = "pdm.backend"
 name = "variantplaner"
 description = "A tool kit to manage many variant on desktop computer"
 authors = [{name = "Pierre Marijon", email = "pierre.marijon-ext@aphp.fr"}]
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE"]
 readme = "README.md"
 requires-python = ">=3.9"
 keywords = []
@@ -36,25 +37,22 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://seqoia-it.github.io/variantplaner"
-Documentation = "https://seqoia-it.github.io/variantplaner"
-Changelog = "https://seqoia-it.github.io/variantplaner/changelog"
+Homepage = "https://SeqOIA-IT.github.io/variantplaner"
+Documentation = "https://SeqOIA-IT.github.io/variantplaner"
+Changelog = "https://SeqOIA-IT.github.io/variantplaner/changelog"
 Repository = "https://github.com/SeqOIA-IT/variantplaner"
 Issues = "https://github.com/SeqOIA-IT/variantplaner/issues"
 
 [project.scripts]
 variantplaner = "variantplaner.cli:main"
 
-[tool.pdm]
-version = {source = "scm"}
-plugins = [
-    "pdm-multirun",
-]
+[tool.pdm.version]
+source = "call"
+getter = "scripts.get_version:get_version"
 
 [tool.pdm.build]
-package-dir = "src"
-editable-backend = "editables"
-excludes = ["**/.pytest_cache"]
+# Include as much as possible in the source distribution, to help redistributors.
+excludes = ["**/.pytest_cache", "**/.mypy_cache"]
 source-includes = [
     "config",
     "docs",
@@ -68,42 +66,45 @@ source-includes = [
 ]
 
 [tool.pdm.build.wheel-data]
+# Manual pages can be included in the wheel.
+# Depending on the installation tool, they will be accessible to users.
+# pipx supports it, uv does not yet, see https://github.com/astral-sh/uv/issues/4731.
 data = [
     {path = "share/**/*", relative-to = "."},
 ]
 
-[tool.uv]
-dev-dependencies = [
-    # dev
-    "editables>=0.5",
-
-    # maintenance
+[dependency-groups]
+maintain = [
     "build>=1",
     "git-changelog>=2",
-    "twine>=6",
-
-    # ci
+    "twine>=5",
+    "yore>=0.4",
+]
+ci = [
     "duty>=1",
-    "ruff>=0.9",
-    "pytest>=8",
+    "mypy>=1",
     "pytest-cov>=6",
     "pytest-randomly>=3",
     "pytest-xdist>=3",
-    "mypy>=1",
+    "pytest>=8",
+    "ruff>=0.11",
     "types-markdown>=3",
     "types-pyyaml>=6",
-
-    # docs
+    "yore>=0.4",
+]
+ docs = [
     "markdown-callouts>=0.4",
     "markdown-exec>=1",
-    "mkdocs>=1",
     "mkdocs-coverage>=1",
-    "mkdocs-gen-files>=0.5",
     "mkdocs-git-revision-date-localized-plugin>=1",
-    "mkdocs-literate-nav>=0.6",
     "mkdocs-material>=9",
     "mkdocs-minify-plugin>=0.8",
-    "mkdocstrings[python]>=0.27",
+    "mkdocs-section-index>=0.3",
+    "mkdocs>=1",
+    "mkdocstrings[python]>=0.29",
     # YORE: EOL 3.10: Remove line.
-    "tomli>=2; python_version < '3.11'",
+    "tomli>=2.0; python_version < '3.11'",
 ]
+
+[tool.uv]
+default-groups = ["maintain", "ci", "docs"]
