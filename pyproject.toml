@@ -33,6 +33,7 @@ dependencies = [
     "polars-u64-idx==1.23.0",
     "click>=8",
     "typing-extensions>=4",
+    "xopen>=2",
     "variantid @ file:///${PROJECT_ROOT}/variantid/variantid",
 ]
 

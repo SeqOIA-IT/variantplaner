@@ -8,6 +8,7 @@ import typing
 
 # 3rd party import
 import polars
+import xopen
 
 # project import
 from variantplaner import normalization
@@ -59,7 +60,7 @@ class Vcf:
         behavior: VcfParsingBehavior = VcfParsingBehavior.NOTHING,
     ) -> None:
         """Populate Vcf object with vcf file."""
-        with open(path) as fh:
+        with xopen.xopen(path) as fh:
             try:
                 self.header.from_lines(fh)
             except NotVcfHeaderError as e:

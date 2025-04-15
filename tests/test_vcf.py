@@ -26,7 +26,7 @@ def test_vcf_filter_star() -> None:
 
 def test_chrom2length_overide_vcf_contig() -> None:
     """Check chromosome2length option overide vcf contig information."""
-    vcf_path = DATA_DIR / "all_info.vcf"
+    vcf_path = DATA_DIR / "all_info.vcf.gz"
 
     obj = Vcf()
     obj.from_path(vcf_path, None)
