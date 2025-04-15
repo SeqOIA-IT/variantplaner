@@ -25,7 +25,7 @@ from variantplaner.objects import (
 def int2string(value: int) -> str:
     return base64.urlsafe_b64encode(
         value.to_bytes(
-            (value.bit_length() + 7) // 8,
+            ((value.bit_length() + 7) // 8) + 1,
             byteorder="little",
             signed=True,
         )
