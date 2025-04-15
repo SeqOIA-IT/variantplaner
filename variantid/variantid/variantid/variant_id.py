@@ -27,7 +27,6 @@ def compute_part(
     id: variantid._typing.IntoExprColumn,
     number_of_bits: int,
 ) -> polars.Expr:
-    print("LIB PATH", variantid._utils.LIB)
     return polars.plugins.register_plugin_function(
         plugin_path=variantid._utils.LIB,
         args=[id],

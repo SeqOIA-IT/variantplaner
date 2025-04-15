@@ -3,10 +3,8 @@
 /* std use */
 
 /* 3rd party use */
-use serde;
 
 /* project use */
-use ahash;
 use polars::prelude::*;
 
 #[derive(serde::Deserialize)]
@@ -65,9 +63,6 @@ struct ComputePartKwargs {
 
 fn compute_part_worker(id: u64, number_of_bits: u64) -> u64 {
     if id >> 63 == 0b1 {
-        println!("NB: {}", number_of_bits);
-        println!("NB: {}", 1 << number_of_bits);
-        println!("NB: {}", (1 << number_of_bits) - 1);
         (1 << number_of_bits) - 1
     } else {
         (id << 1) >> (64 - number_of_bits)
