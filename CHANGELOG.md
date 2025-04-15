@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.4.1](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.4.1) - 2025-04-15
+
+<small>[Compare with 0.4.0](https://github.com/SeqOIA-IT/variantplaner/compare/0.4.0...0.4.1)</small>
+
+### Bug Fixes
+
+- try to avoid possible random error in int2string ([5c7d40e](https://github.com/SeqOIA-IT/variantplaner/commit/5c7d40e1246397cb5dac601f0959c5552ffc3bcd) by Pierre Marijon).
+
 ## [0.4.0](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.4.0) - 2025-04-10
 
 <small>[Compare with 0.3.1](https://github.com/SeqOIA-IT/variantplaner/compare/0.3.1...0.4.0)</small>
