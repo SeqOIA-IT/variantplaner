@@ -29,8 +29,8 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "polars==1.23.0",
-    "polars-u64-idx==1.23.0",
+    "polars>=1.29",
+    "polars-u64-idx>=1.29",
     "click>=8",
     "typing-extensions>=4",
     "xopen>=2",

@@ -41,7 +41,7 @@ def __hive_worker(
 
     lf = normalization.add_id_part(polars.concat(lf for lf in lfs if lf is not None), number_of_bits=number_of_bits)
 
-    for (part_name, *_), df in lf.collect(engine="cpu").group_by(polars.col("id_part")):
+    for (part_name, *_), df in lf.collect().group_by(polars.col("id_part")):
         df.write_parquet(output_prefix / f"id_part={part_name}" / f"{basename}.parquet")
 
 
@@ -70,7 +70,7 @@ def __merge_file(prefix: pathlib.Path, basenames: list[str], append: bool) -> No
     if lfs:
         logger.info(f"Merge multiple file in {prefix / '0.parquet'}")
         lf = polars.concat(lfs)
-        lf.sink_parquet(prefix / "0.parquet", maintain_order=False, row_group_size=8192)
+        lf.sink_parquet(prefix / "0.parquet", maintain_order=False, row_group_size=pow(2, 20))
 
     for path in paths:
         logger.info(f"Remove file {path}.parquet")

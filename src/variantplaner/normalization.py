@@ -34,7 +34,7 @@ def add_variant_id(lf: polars.LazyFrame, chrom2length: polars.LazyFrame) -> pola
     Returns:
         [polars.LazyFrame](https://pola-rs.github.io/polars/py-polars/html/reference/lazyframe/index.html) with chr column normalized
     """
-    real_pos_max = chrom2length.select([polars.col("length").sum()]).collect(engine="cpu").get_column("length").max()
+    real_pos_max = chrom2length.select([polars.col("length").sum()]).collect().get_column("length").max()
 
     large_variant_len = (64 - len(format(real_pos_max, "b")) - 2) // 2 + 1
 

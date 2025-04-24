@@ -120,9 +120,11 @@ def variants(
         variants = __append(output_path, variants)
 
     try:
-        variants.sink_parquet(output_path, maintain_order=False)
+        variants.sink_parquet(output_path)
     except polars.exceptions.InvalidOperationError:
-        variants.collect(engine="cpu").write_parquet(output_path)
+        variants.collect().write_parquet(output_path)
+    except polars.exceptions.ColumnNotFoundError:
+        variants.collect().write_parquet(output_path)
     logger.info(f"End write variants in {output_path}")
 
 
@@ -169,6 +171,8 @@ def genotypes(
     try:
         genotypes_data.lf.sink_parquet(output_path, maintain_order=False)
     except polars.exceptions.InvalidOperationError:
+        genotypes_data.lf.collect(engine="cpu").write_parquet(output_path)
+    except polars.exceptions.ColumnNotFoundError:
         genotypes_data.lf.collect(engine="cpu").write_parquet(output_path)
     logger.info(f"End write genotypes in {output_path}")
 
@@ -226,6 +230,8 @@ def annotations_subcommand(
     try:
         annotations_data.sink_parquet(output_path, maintain_order=False)
     except polars.exceptions.InvalidOperationError:
+        annotations_data.collect(engine="cpu").write_parquet(output_path)
+    except polars.exceptions.ColumnNotFoundError:
         annotations_data.collect(engine="cpu").write_parquet(output_path)
     logger.info(f"End write annotations in {output_path}")
 
