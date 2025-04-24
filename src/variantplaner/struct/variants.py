@@ -57,7 +57,7 @@ def __merge_split_unique(paths: list[pathlib.Path], out_prefix: pathlib.Path) ->
     chr_names = set()
 
     lf = polars.concat([polars.scan_parquet(path) for path in paths])
-    for (chr_name, *_), df_group in lf.collect(engine="cpu").group_by(polars.col("chr")):
+    for (chr_name, *_), df_group in lf.collect().group_by(polars.col("chr")):
         chr_names.add(str(chr_name))
         df_group.unique(subset=("pos", "ref", "alt")).write_parquet(out_prefix / f"{chr_name}.parquet")
 

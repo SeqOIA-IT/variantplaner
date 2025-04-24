@@ -21,7 +21,7 @@ class Genotypes(polars.LazyFrame):
 
     def samples_names(self) -> list[str]:
         """Get list of sample name."""
-        return self.lf.select("sample").unique("sample").collect(engine="cpu").get_column("sample").to_list()
+        return self.lf.select("sample").unique("sample").collect().get_column("sample").to_list()
 
     @classmethod
     def minimal_schema(cls) -> dict[str, type]:

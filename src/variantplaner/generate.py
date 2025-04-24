@@ -34,7 +34,7 @@ def transmission_ped(
     Raises:
         NoGTError: If genotypes_lf not contains gt column.
     """
-    pedigree_df = pedigree_lf.collect(engine="cpu")
+    pedigree_df = pedigree_lf.collect()
 
     first_sample = pedigree_df.get_column("personal_id").to_list()[0]
 
@@ -81,11 +81,11 @@ def transmission(
     if "gt" not in genotypes_column:
         raise NoGTError("genotype polars.LazyFrame")
 
-    samples = sorted(genotypes_lf.select("sample").unique().collect(engine="cpu").get_column("sample").to_list())
+    samples = sorted(genotypes_lf.select("sample").unique().collect().get_column("sample").to_list())
 
     logger.debug(f"{samples=}")
 
-    genotypes_df = genotypes_lf.collect(engine="cpu")
+    genotypes_df = genotypes_lf.collect()
 
     index_df = (
         genotypes_df.filter(polars.col("sample") == index_name)

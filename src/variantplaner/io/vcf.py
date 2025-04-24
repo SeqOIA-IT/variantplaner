@@ -179,7 +179,7 @@ def lazyframe_in_vcf(
 
     with open(output_path, "wb") as fh:
         fh.write(header.encode())
-        fh.write(lf.collect(engine="cpu").write_csv(separator="\t").encode())
+        fh.write(lf.collect().write_csv(separator="\t").encode())
 
 
 def __rebuild_info_column(lf: polars.LazyFrame, vcfinfo2parquet_name: list[tuple[str, str]]) -> polars.LazyFrame:

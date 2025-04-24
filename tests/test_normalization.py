@@ -69,16 +69,16 @@ def test_partition() -> None:
     chr2len = __generate_chr2len()
     df = __generate_variants()
 
-    df = normalization.add_variant_id(df.lazy(), chr2len.lazy()).collect(engine="cpu")
+    df = normalization.add_variant_id(df.lazy(), chr2len.lazy()).collect()
 
-    df = normalization.add_id_part(df.lazy()).collect(engine="cpu")
-
-    assert df.get_column("id_part").to_list() == [9, 3, 255, 9, 124, 255]
-
-    df = normalization.add_id_part(df.lazy(), number_of_bits=8).collect(engine="cpu")
+    df = normalization.add_id_part(df.lazy()).collect()
 
     assert df.get_column("id_part").to_list() == [9, 3, 255, 9, 124, 255]
 
-    df = normalization.add_id_part(df.lazy(), number_of_bits=9).collect(engine="cpu")
+    df = normalization.add_id_part(df.lazy(), number_of_bits=8).collect()
+
+    assert df.get_column("id_part").to_list() == [9, 3, 255, 9, 124, 255]
+
+    df = normalization.add_id_part(df.lazy(), number_of_bits=9).collect()
 
     assert df.get_column("id_part").to_list() == [19, 6, 511, 19, 248, 511]
