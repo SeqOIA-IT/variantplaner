@@ -16,6 +16,7 @@ if typing.TYPE_CHECKING:  # pragma: no cover
 import polars
 
 # project import
+import variantplaner
 from variantplaner import normalization
 
 logger = logging.getLogger("struct.genotypes")
@@ -117,7 +118,9 @@ def hive(
         ),
     )
 
-    basenames = ["_".join(p.stem for p in g_paths if p is not None) for g_paths in path_groups]
+    basenames = [
+        variantplaner.int2string(hash("_".join(p.stem for p in g_paths if p is not None))) for g_paths in path_groups
+    ]
 
     lf_groups = [[polars.scan_parquet(p) for p in g_paths if p is not None] for g_paths in path_groups]
 
