@@ -23,6 +23,7 @@ from variantplaner.objects import (
 
 
 def int2string(value: int) -> str:
+    """Convert an int in a string. Use for temp file creation."""
     return base64.urlsafe_b64encode(
         value.to_bytes(
             ((value.bit_length() + 7) // 8) + 1,
@@ -48,4 +49,4 @@ __all__: list[str] = [
     "normalization",
     "struct",
 ]
-__version__: str = "0.4.0"
+__version__: str = "0.4.2"
