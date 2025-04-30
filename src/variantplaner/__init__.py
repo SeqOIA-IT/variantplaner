@@ -7,7 +7,8 @@ But also build a file struct to get a fast variant database interrogations time.
 
 from __future__ import annotations
 
-import base64
+import typing
+import uuid
 
 from variantplaner import extract, generate, normalization, struct
 from variantplaner.objects import (
@@ -22,15 +23,9 @@ from variantplaner.objects import (
 )
 
 
-def int2string(value: int) -> str:
+def any2string(value: typing.Any) -> str:
     """Convert an int in a string. Use for temp file creation."""
-    return base64.urlsafe_b64encode(
-        value.to_bytes(
-            ((value.bit_length() + 7) // 8) + 1,
-            byteorder="little",
-            signed=True,
-        )
-    ).decode("utf-8")
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, str(value)))
 
 
 __all__: list[str] = [

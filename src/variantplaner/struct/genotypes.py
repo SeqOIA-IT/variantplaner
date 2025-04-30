@@ -119,7 +119,7 @@ def hive(
     )
 
     basenames = [
-        variantplaner.int2string(hash("_".join(p.stem for p in g_paths if p is not None))) for g_paths in path_groups
+        variantplaner.any2string(hash("_".join(p.stem for p in g_paths if p is not None))) for g_paths in path_groups
     ]
 
     lf_groups = [[polars.scan_parquet(p) for p in g_paths if p is not None] for g_paths in path_groups]
