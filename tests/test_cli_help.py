@@ -15,7 +15,7 @@ from variantplaner import cli
 
 def test_show_help() -> None:
     """Call cli '--help'."""
-    runner = CliRunner(mix_stderr=False)
+    runner = CliRunner()
     result = runner.invoke(cli.main, ["--help"])
 
     assert result.exit_code == 0
@@ -46,7 +46,7 @@ Commands:
 )
 def test_show_help_struct() -> None:
     """Call cli 'struct --help'."""
-    runner = CliRunner(mix_stderr=False)
+    runner = CliRunner()
     result = runner.invoke(cli.main, ["struct", "--help"])
 
     assert result.exit_code == 0
@@ -72,7 +72,7 @@ Commands:
 
 def test_show_help_metadata() -> None:
     """Call cli 'metadata --help'."""
-    runner = CliRunner(mix_stderr=False)
+    runner = CliRunner()
     result = runner.invoke(cli.main, ["metadata", "--help"])
 
     assert result.exit_code == 0
