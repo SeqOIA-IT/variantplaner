@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.4.3](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.4.3) - 2025-05-14
+
+<small>[Compare with 0.4.2](https://github.com/SeqOIA-IT/variantplaner/compare/0.4.2...0.4.3)</small>
+
+### Features
+
+- set row group size parameter of sink_polars ([9f2285a](https://github.com/SeqOIA-IT/variantplaner/commit/9f2285a7237cc5f0875c9e17cb6ec8810f883fe4) by Pierre Marijon).
+
+### Bug Fixes
+
+- correct snpeff annotation script ([197297c](https://github.com/SeqOIA-IT/variantplaner/commit/197297c847e39ec44fa9c9763e4b3e0863c810af) by Pierre Marijon).
+- apply click 8.2 change ([4524890](https://github.com/SeqOIA-IT/variantplaner/commit/45248907e4f5e97a2bf5cd5bff3127959f33935f) by Pierre Marijon).
+
 ## [0.4.2](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.4.2) - 2025-04-15
 
 <small>[Compare with 0.4.1](https://github.com/SeqOIA-IT/variantplaner/compare/0.4.1...0.4.2)</small>

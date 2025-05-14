@@ -8,7 +8,7 @@ A toolkit to manage many variants from many samples, with limited resources.
 ## Installation
 
 ```bash
-pip install git+https://github.com/SeqOIA-IT/variantplaner.git@0.4.1
+pip install git+https://github.com/SeqOIA-IT/variantplaner.git@0.4.3
 ```
 
 With [`uv`](https://docs.astral.sh/uv/):
@@ -16,7 +16,7 @@ With [`uv`](https://docs.astral.sh/uv/):
 
 ```bash
 python -m pip install --user pipx
-pipx install git+https://github.com/SeqOIA-IT/variantplaner.git@0.4.1
+pipx install git+https://github.com/SeqOIA-IT/variantplaner.git@0.4.3
 ```
 
 ## Usage
