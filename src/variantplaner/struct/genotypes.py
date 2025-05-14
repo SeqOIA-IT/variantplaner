@@ -70,7 +70,7 @@ def __merge_file(prefix: pathlib.Path, basenames: list[str], append: bool) -> No
     if lfs:
         logger.info(f"Merge multiple file in {prefix / '0.parquet'}")
         lf = polars.concat(lfs)
-        lf.sink_parquet(prefix / "0.parquet", maintain_order=False)
+        lf.sink_parquet(prefix / "0.parquet", maintain_order=False, row_group_size=8192)
 
     for path in paths:
         logger.info(f"Remove file {path}.parquet")
