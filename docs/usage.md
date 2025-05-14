@@ -357,7 +357,6 @@ lf = lf.cast({"id": polars.UInt64})
 lf = lf.with_columns(
     [
         polars.col("ANN")
-        .list.get(0)
         .str.split("|")
         .cast(polars.List(polars.Utf8()))
         .alias("ann"),
@@ -379,7 +378,7 @@ lf = lf.with_columns(
         polars.col("ann").list.get(11).alias("cdna_pos"),
         polars.col("ann").list.get(12).alias("cdna_len"),
         polars.col("ann").list.get(13).alias("cds_pos"),
-        polars.col("ann").list.get(14).alias("cvs_len"),
+        polars.col("ann").list.get(14).alias("cds_len"),
         polars.col("ann").list.get(15).alias("aa_pos"),
     ]
 ).drop("ann")
