@@ -87,7 +87,6 @@ for vcf_path in $(ls vcf/*.vcf)
 do
     sample_name=$(basename ${vcf_path} .vcf)
     variantplaner -t 4 vcf2parquet -i ${vcf_path} \
-    -c grch38.92.csv \
     variants -o variants/${sample_name}.parquet \
     genotypes -o genotypes/samples/${sample_name}.parquet \
     -f GT:PS:DP:ADALL:AD:GQ
@@ -99,7 +98,7 @@ We iterate over all vcf, variants are store in `variants/{sample_name}.parquet`,
 /// details | gnu-parallel method
 ```bash
 find vcf -type f -name *.vcf -exec basename {} .vcf \; | \
-parallel variantplaner -t 2 vcf2parquet -c grch38.92.csv -i vcf/{}.vcf \
+parallel variantplaner -t 2 vcf2parquet -i vcf/{}.vcf \
 variants -o variants/{}.parquet genotypes -o genotypes/samples/{}.parquet -f GT:PS:DP:ADALL:AD:GQ
 ```
 ///
@@ -110,6 +109,13 @@ Parquet variants file contains 5 column:
 - ref: Reference sequence
 - alt: Alternative sequence
 - id: An hash of other value collision isn't check but highly improbable [check api documentation](reference/variantplaner/normalization.md#variantplaner.normalization.add_variant_i)
+
+
+!!! danger
+
+	Column `id` value dependent on chromosome length and chromosome order in the VCF header.
+
+	If you cannot be sure that the parameters are the same between each VCF file, you must create a chromosome length file. Section [add annotations](#add-annotations) shows an example of this file.
 
 
 /// details | variants parquet file content
@@ -223,36 +229,7 @@ Maximal genotype value is 92, which corresponds to the character `}`, `~` match 
 
 To work on your variant, you probably need variants annotations.
 
-### Snpeff annotations
-
-First convert your unique variants in parquet format (`variants.parquet`) in vcf:
-```bash
-variantplaner -t 8 parquet2vcf -i variants.parquet -o variants.vcf
-```
-
-`parquet2vcf` subcommand have many more options but we didn't need it now.
-
-Next annotate this `variants.vcf` [with snpeff](https://pcingola.github.io/SnpEff/), we assume you generate a file call `variants.snpeff.vcf`.
-
-To convert annotated vcf in parquet, keep 'ANN' info column and rename vcf id column in snpeff\_id you can run:
-```bash
-mkdir -p annotations
-variantplaner -t 8 vcf2parquet -c grch38.92.csv -i variants.snpeff.vcf annotations -o annotations/snpeff.parquet vcf -i ANN -r snpeff_id
-```
-
-If you didn't set any value of option `-i` in vcf subsubcommand all info column are keep.
-
-### Clinvar annotations
-
-Download last clinvar version:
-
-```bash
-mkdir -p annotations
-curl https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz \
-| gunzip - > annotations/clinvar.vcf
-```
-
-Because clinvar's vcf file header does not contain information on contigs, you should create file `grch38.92.csv` with this content:
+Because many's annotation vcf file header does not contain information on contigs, you should create file `grch38.92.csv` with this content:
 ```
 contig,length
 chr1,248956422
@@ -280,6 +257,37 @@ chr9,138394717
 chrMT,16569
 chrX,156040895
 chrY,57227415
+```
+
+Header name are mandatory. Take care of chromosome order are the same between your vcf header and `grch38.92.csv` and name are same.
+
+### Snpeff annotations
+
+First convert your unique variants in parquet format (`variants.parquet`) in vcf:
+```bash
+variantplaner -t 8 parquet2vcf -i variants.parquet -o variants.vcf
+```
+
+`parquet2vcf` subcommand have many more options but we didn't need it now.
+
+Next annotate this `variants.vcf` [with snpeff](https://pcingola.github.io/SnpEff/), we assume you generate a file call `variants.snpeff.vcf`.
+
+To convert annotated vcf in parquet, keep 'ANN' info column and rename vcf id column in snpeff\_id you can run:
+```bash
+mkdir -p annotations
+variantplaner -t 8 vcf2parquet -c grch38.92.csv -i variants.snpeff.vcf annotations -o annotations/snpeff.parquet vcf -i ANN -r snpeff_id
+```
+
+If you didn't set any value of option `-i` in vcf subsubcommand all info column are keep.
+
+### Clinvar annotations
+
+Download last clinvar version:
+
+```bash
+mkdir -p annotations
+curl https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz \
+| gunzip - > annotations/clinvar.vcf
 ```
 
 Convert clinvar vcf file in parquet file:
