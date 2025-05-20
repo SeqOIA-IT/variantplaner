@@ -78,7 +78,7 @@ data = [
 maintain = [
     "build>=1",
     "git-changelog>=2",
-    "twine>=5",
+    "twine>=6",
     "yore>=0.4",
 ]
 ci = [
