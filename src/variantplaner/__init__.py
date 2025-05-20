@@ -44,4 +44,4 @@ __all__: list[str] = [
     "normalization",
     "struct",
 ]
-__version__: str = "0.4.2"
+__version__: str = "0.4.4"

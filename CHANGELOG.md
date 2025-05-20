@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.4.4](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.4.4) - 2025-05-20
+
+<small>[Compare with 0.4.3](https://github.com/SeqOIA-IT/variantplaner/compare/0.4.3...0.4.4)</small>
+
+### Bug Fixes
+
+- replace int2string by any2string and use uuid instead of python hash function ([a63aa8c](https://github.com/SeqOIA-IT/variantplaner/commit/a63aa8c6f6da6c40fd96b3a9f87e85a38d5c9783) by Pierre Marijon).
+- temporary file name is now a hash of input file name ([2af10fc](https://github.com/SeqOIA-IT/variantplaner/commit/2af10fcc3bee4e696a0b8a3d76582b2920b46dce) by Pierre Marijon).
+- support version 1.29 of polars ([810659a](https://github.com/SeqOIA-IT/variantplaner/commit/810659a63b3d793e546a9fd0e661912cee96e944) by Pierre Marijon).
+
 ## [0.4.3](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.4.3) - 2025-05-14
 
 <small>[Compare with 0.4.2](https://github.com/SeqOIA-IT/variantplaner/compare/0.4.2...0.4.3)</small>
