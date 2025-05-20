@@ -3,9 +3,9 @@
 /* std use */
 
 /* 3rd party use */
+use polars::prelude::*;
 
 /* project use */
-use polars::prelude::*;
 
 #[derive(serde::Deserialize)]
 struct ComputeIdKwargs {

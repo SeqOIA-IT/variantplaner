@@ -26,3 +26,5 @@ __pypackages__/
 .cache/
 
 .benchmarks/
+
+variantid/bench_data
