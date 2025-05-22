@@ -108,11 +108,13 @@ def test_vcf2parquet(tmp_path: pathlib.Path) -> None:
         polars.scan_parquet(DATA_DIR / "no_info.variants.parquet"),
         polars.scan_parquet(variants_path),
         check_row_order=False,
+        check_column_order=False,
     )
     try:
         polars.testing.assert_frame_equal(
             polars.scan_parquet(DATA_DIR / "no_info.genotypes.parquet").sort("id"),
             polars.scan_parquet(genotypes_path).sort("id"),
+            check_column_order=False,
         )
     except OverflowError:  # pragma: no cover
         # TODO remove this
@@ -287,8 +289,6 @@ def test_vcf2parquet_sv_genotypes(tmp_path: pathlib.Path) -> None:
             "genotypes",
             "-o",
             str(genotypes_path),
-            "-f",
-            "GT:GQ:CN:CNQ",
         ],
     )
 
@@ -661,7 +661,7 @@ def test_generate_transmission_ped(tmp_path: pathlib.Path) -> None:
     truth = polars.read_parquet(DATA_DIR / "transmission.parquet").sort("id")
     value = polars.read_parquet(transmission_path).sort("id")
 
-    polars.testing.assert_frame_equal(truth, value)
+    polars.testing.assert_frame_equal(truth, value, check_row_order=False, check_column_order=False)
 
 
 def test_generate_transmission_no_ped(tmp_path: pathlib.Path) -> None:
@@ -691,7 +691,7 @@ def test_generate_transmission_no_ped(tmp_path: pathlib.Path) -> None:
     truth = polars.read_parquet(DATA_DIR / "transmission.parquet").sort("id")
     value = polars.read_parquet(transmission_path).sort("id")
 
-    polars.testing.assert_frame_equal(truth, value)
+    polars.testing.assert_frame_equal(truth, value, check_row_order=False, check_column_order=False)
 
 
 def test_generate_transmission_nothing(tmp_path: pathlib.Path) -> None:

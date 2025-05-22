@@ -5,6 +5,7 @@
 ##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth (reads with MQ=255 or with bad mates are filtered)">
 ##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=LP,Number=1,Type=String,Description="Genotype">
 ##FILTER=<ID=base_qual,Description="alt median base quality">
 ##FILTER=<ID=clustered_events,Description="Clustered events observed in the tumor">
 ##FILTER=<ID=contamination,Description="contamination">
@@ -40,8 +41,8 @@
 20	45688093	.	C	A	191.6	.	.	GT:AD:DP:GQ	./.:.:.:.	./.:.:.:.	0/1:4,7:11:99
 20	45698591	.	A	C	1225.03	.	.	GT:AD:DP:GQ	./.:.:.:.	./.:.:.:.	1/1:0,43:43:99
 20	45698966	.	TA	T	591.03	.	.	GT:AD:DP:GQ	./.:.:.:.	./.:.:.:.	1/1:0,18:18:54
-20	45704687	.	C	CT	.	multiallelic;slippage	.	GT:AD:DP	././.:.:.	0/./1:35,6:49	././.:.:.
-20	45704687	.	CT	C	.	multiallelic;normal_artifact;slippage	.	GT:AD:DP	././.:.:.	0/1/.:35,8:49	././.:.:.
+20	45704687	.	C	CT	.	multiallelic;slippage	.	GT:AD:DP././.:.:.	0/./1:35,6:49	././.:.:.
+20	45704687	.	CT	C	.	multiallelic;normal_artifact;slippage	.GT:AD:DP	././.:.:.	0/1/.:35,8:49	././.:.:.
 X	84984502	.	C	T	3153.03	PASS	.	GT:AD:DP:GQ	./.:.:.:.	0|1:0,3:3:.	1/1:0,72:72:99
 X	84984522	.	A	C	3120.03	PASS	.	GT:AD:DP:GQ	./.:.:.:.	0|1:0,1:1:.	1/1:0,71:71:99
 X	84985094	.	A	T	3353.03	.	.	GT:AD:DP:GQ	./.:.:.:.	./.:.:.:.	1/1:0,86:86:99
@@ -51,4 +52,4 @@ MT	15326	.	A	G	135524	PASS	.	GT:AD:DP:GQ	1/1:1,4317:4318:99	0/1:0,6:6:.	1/1:0,45
 MT	15693	.	T	C	144034	base_qual	.	GT:AD:DP:GQ	1/1:1,4669:4670:99	0/1:0,10:10:.	1/1:2,4734:4736:99
 MT	16134	.	C	T	159292	PASS	.	GT:AD:DP:GQ	1/1:0,1876:1876:99	0/1:1,6:7:.	1/1:5,4828:4833:99
 MT	16356	.	T	C	120712	PASS	.	GT:AD:DP:GQ	1/1:0,1654:1654:99	0/1:0,12:12:.	1/1:1,4092:4093:99
-MT	16519	.	T	C	93796	PASS	.	GT:AD:DP:GQ	1/1:0,1272:1272:99	0/1:0,5:5:.	1/1:0,3084:3084:99
+MT	16519	.	T	C	93796	PASS	.	GT:AD:DP:GQ:LP	1/1:0,1272:1272:99:1	0/1:0,5:5:.:1	1/1:0,3084:3084:99:1

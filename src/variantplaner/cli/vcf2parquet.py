@@ -137,14 +137,6 @@ def variants(
     type=click.Path(writable=True, path_type=pathlib.Path),
     required=True,
 )
-@click.option(
-    "-f",
-    "--format-string",
-    help="Value of FORMAT column, line not match with this are ignored.",
-    type=str,
-    default="GT:AD:DP:GQ",
-    show_default=True,
-)
 def genotypes(
     ctx: click.Context,
     output_path: pathlib.Path,
@@ -159,7 +151,7 @@ def genotypes(
     logger.debug(f"parameter: {output_path=} {format_string=}")
 
     try:
-        genotypes_data = lf.genotypes(format_string)
+        genotypes_data = lf.genotypes()
     except exception.NoGenotypeError:
         logger.error("It's seems vcf not contains genotypes information.")  # noqa: TRY400  we are in cli exception isn't readable
         sys.exit(12)

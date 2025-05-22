@@ -84,7 +84,7 @@ class Vcf:
 
         schema = self.lf.collect_schema()
         self.lf = self.lf.rename(dict(zip(schema.names(), self.header.column_name(schema.len()))))
-        self.lf = self.lf.cast(Vcf.schema())  # type: ignore # noqa: PGH003  polars 1.0 typing stuff
+        self.lf = self.lf.cast(Vcf.schema())
 
         if behavior & VcfParsingBehavior.MANAGE_SV:
             self.lf = self.lf.with_columns(self.header.info_parser({"SVTYPE", "SVLEN"}))
@@ -105,7 +105,7 @@ class Vcf:
         """Set variants of vcf."""
         self.lf = variants.lf
 
-    def genotypes(self, format_str: str = "GT:AD:DP:GQ") -> Genotypes:
+    def genotypes(self) -> Genotypes:
         """Get genotype of vcf."""
         schema = self.lf.collect_schema()
 
@@ -115,42 +115,52 @@ class Vcf:
         lf = self.lf.select([*schema.names()[schema.names().index("format") :]])
         schema = lf.collect_schema()
 
-        # Clean bad variant
-        lf = lf.filter(polars.col("format").str.starts_with(format_str)).select(*schema.names()[1:])
-
-        # Found index of genotype value
-        col_index = {
-            key: index
-            for (index, key) in enumerate(
-                format_str.split(":"),
-            )
-        }
-
-        # Pivot value
-        genotypes = Genotypes()
-        genotypes.lf = lf.unpivot(index=["id"]).with_columns(
-            [
-                polars.col("id"),
-                polars.col("variable").alias("sample"),
-                polars.col("value").str.split(":"),
-            ],
-        )
-
         # Split genotype column in sub value
         col2expr = self.header.format_parser()
 
-        genotypes.lf = genotypes.lf.with_columns(
-            [
-                polars.col("value").list.get(index).pipe(function=col2expr[col], col_name=col)
-                for col, index in col_index.items()
-            ],
-        )
+        format_strs = lf.select("format").unique().collect().get_column("format")
 
-        # Select intrusting column
-        genotypes.lf = genotypes.lf.select(["id", "sample", *[col.lower() for col in col_index]])
+        sublfs = []
+        for fstr in format_strs.to_list():
+            # Found index of genotyping value
+            col_index = {
+                key: index
+                for (index, key) in enumerate(
+                    fstr.split(":"),
+                )
+            }
+
+            sublf = lf.filter(polars.col("format") == fstr)
+
+            # Pivot value
+            sublf = sublf.unpivot(index=["id"]).with_columns(
+                [
+                    polars.col("id"),
+                    polars.col("variable").alias("sample"),
+                    polars.col("value").str.split(":"),
+                ],
+            )
+
+            conversion = []
+            for col in col2expr:
+                if col in col_index:
+                    conversion.append(
+                        polars.col("value").list.get(col_index[col]).pipe(function=col2expr[col], col_name=col)
+                    )
+                else:
+                    conversion.append(polars.lit("").pipe(function=col2expr[col], col_name=col))
+
+            sublf = sublf.with_columns(conversion)
+
+            sublfs.append(sublf)
+
+        genotypes = Genotypes()
+        lf = polars.concat(sublfs).drop("variable", "value")
 
         if "gt".upper() in col2expr:
-            genotypes.lf = genotypes.lf.filter(polars.col("gt") != 0)
+            lf = lf.filter(polars.col("gt") != 0)
+
+        genotypes.lf = lf
 
         return genotypes
 

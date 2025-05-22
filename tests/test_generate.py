@@ -60,7 +60,7 @@ def test_transmission_missing_ad(tmp_path: pathlib.Path) -> None:
 
     transmission = generate.transmission_ped(genotypes_lf, pedigree_lf)
 
-    assert transmission.columns == [
+    assert set(transmission.columns) == {
         "id",
         "index_gt",
         "index_dp",
@@ -72,7 +72,7 @@ def test_transmission_missing_ad(tmp_path: pathlib.Path) -> None:
         "father_dp",
         "father_gq",
         "origin",
-    ]
+    }
 
 
 def test_transmission_mother_no_variant() -> None:
