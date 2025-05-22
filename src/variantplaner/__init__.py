@@ -10,7 +10,7 @@ from __future__ import annotations
 import typing
 import uuid
 
-from variantplaner import extract, generate, normalization, struct
+from variantplaner import generate, normalization, struct
 from variantplaner.objects import (
     Annotations,
     ContigsLength,
@@ -38,7 +38,6 @@ __all__: list[str] = [
     "VcfHeader",
     "VcfParsingBehavior",
     "exception",
-    "extract",
     "generate",
     "io",
     "normalization",
