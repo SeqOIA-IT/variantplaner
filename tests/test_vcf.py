@@ -37,3 +37,15 @@ def test_chrom2length_overide_vcf_contig() -> None:
     obj.from_path(vcf_path, DATA_DIR / "grch38.92.csv")
 
     assert obj.lf.filter(polars.col("id") == pow(2, 64) - 1).collect().height == 0
+
+
+def test_multi_format() -> None:
+    """Check multi format work."""
+    vcf_path = DATA_DIR / "multi_format.vcf"
+
+    obj = Vcf()
+    obj.from_path(vcf_path, DATA_DIR / "grch38.92.csv")
+
+    genotypes_data = obj.genotypes()
+
+    assert genotypes_data.lf.collect().height == 42
