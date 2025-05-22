@@ -159,10 +159,10 @@ pqrs head genotypes/samples/HG001.parquet
 We can now aggregate all variant present in our dataset to perform this operation we use divide to conquer merge method by generate temporary file. By default, file are written in `/tmp` but you can control where these files are written by set `TMPDIR`, `TEMP` or `TMP` directory.
 
 ```bash
-variantplaner -t 8 struct -i variants/*.parquet -- variants -o variants.parquet
+variantplaner -t 8 struct -i variants/*.parquet -- variants -o uniq_variants/
 ```
 
-File `variants.parquet` contains all unique variants present in dataset, `--` after last input path are mandatory.
+Directory `uniq_variants` contains all unique variants present in dataset split by chromosome, `--` after last input path are mandatory.
 
 ### Genotypes structuration
 
