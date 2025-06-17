@@ -21,7 +21,6 @@ This tutorial assume you are on unix like system, you have python setup and you 
 Requirements list:
 
 - curl
-- gunzip
 - [pqrs](https://github.com/manojkarthick/pqrs) (only for transmission computation, otherwise optional)
 
 Optional:
@@ -40,12 +39,12 @@ Quering dataset:
 mkdir -p vp_tuto/vcf/
 cd vp_tuto
 URI_ROOT="https://ftp-trace.ncbi.nlm.nih.gov/ReferenceSamples/giab/release"
-curl ${URI_ROOT}/NA12878_HG001/latest/GRCh38/HG001_GRCh38_1_22_v4.2.1_benchmark.vcf.gz | gunzip - > vcf/HG001.vcf
-curl ${URI_ROOT}/AshkenazimTrio/HG002_NA24385_son/latest/GRCh38/HG002_GRCh38_1_22_v4.2.1_benchmark.vcf.gz | gunzip - > vcf/HG002.vcf
-curl ${URI_ROOT}/AshkenazimTrio/HG003_NA24149_father/latest/GRCh38/HG003_GRCh38_1_22_v4.2.1_benchmark.vcf.gz | gunzip - > vcf/HG003.vcf
-curl ${URI_ROOT}/AshkenazimTrio/HG004_NA24143_mother/latest/GRCh38/HG004_GRCh38_1_22_v4.2.1_benchmark.vcf.gz | gunzip - > vcf/HG004.vcf
-curl ${URI_ROOT}/ChineseTrio/HG006_NA24694_father/latest/GRCh38/HG006_GRCh38_1_22_v4.2.1_benchmark.vcf.gz | gunzip - > vcf/HG006.vcf
-curl ${URI_ROOT}/ChineseTrio/HG007_NA24695_mother/latest/GRCh38/HG007_GRCh38_1_22_v4.2.1_benchmark.vcf.gz | gunzip - > vcf/HG007.vcf
+curl ${URI_ROOT}/NA12878_HG001/latest/GRCh38/HG001_GRCh38_1_22_v4.2.1_benchmark.vcf.gz > vcf/HG001.vcf.gz
+curl ${URI_ROOT}/AshkenazimTrio/HG002_NA24385_son/latest/GRCh38/HG002_GRCh38_1_22_v4.2.1_benchmark.vcf.gz > vcf/HG002.vcf.gz
+curl ${URI_ROOT}/AshkenazimTrio/HG003_NA24149_father/latest/GRCh38/HG003_GRCh38_1_22_v4.2.1_benchmark.vcf.gz > vcf/HG003.vcf.gz
+curl ${URI_ROOT}/AshkenazimTrio/HG004_NA24143_mother/latest/GRCh38/HG004_GRCh38_1_22_v4.2.1_benchmark.vcf.gz > vcf/HG004.vcf.gz
+curl ${URI_ROOT}/ChineseTrio/HG006_NA24694_father/latest/GRCh38/HG006_GRCh38_1_22_v4.2.1_benchmark.vcf.gz > vcf/HG006.vcf.gz
+curl ${URI_ROOT}/ChineseTrio/HG007_NA24695_mother/latest/GRCh38/HG007_GRCh38_1_22_v4.2.1_benchmark.vcf.gz > vcf/HG007.vcf.gz
 ```
 
 ## Variant planner presentation
@@ -83,9 +82,9 @@ mkdir -p variants genotypes/samples/
 ```
 
 ```
-for vcf_path in $(ls vcf/*.vcf)
+for vcf_path in $(ls vcf/*.vcf.gz)
 do
-    sample_name=$(basename ${vcf_path} .vcf)
+    sample_name=$(basename ${vcf_path} .vcf.gz)
     variantplaner -t 4 vcf2parquet -i ${vcf_path} \
     variants -o variants/${sample_name}.parquet \
     genotypes -o genotypes/samples/${sample_name}.parquet \
@@ -286,8 +285,7 @@ Download last clinvar version:
 
 ```bash
 mkdir -p annotations
-curl https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz \
-| gunzip - > annotations/clinvar.vcf
+curl https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz > annotations/clinvar.vcf.gz
 ```
 
 Convert clinvar vcf file in parquet file:

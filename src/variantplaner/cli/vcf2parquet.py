@@ -140,7 +140,6 @@ def variants(
 def genotypes(
     ctx: click.Context,
     output_path: pathlib.Path,
-    format_string: str = "GT:AD:DP:GQ",
 ) -> None:
     """Write genotypes."""
     logger = logging.getLogger("vcf2parquet.genotypes")
@@ -148,7 +147,7 @@ def genotypes(
     lf = ctx.obj["lazyframe"]
     append = ctx.obj["append"]
 
-    logger.debug(f"parameter: {output_path=} {format_string=}")
+    logger.debug(f"parameter: {output_path=}")
 
     try:
         genotypes_data = lf.genotypes()

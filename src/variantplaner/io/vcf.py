@@ -1,7 +1,5 @@
 """Read and write vcf file."""
 
-# ruff: noqa: PLR5501
-
 # std import
 from __future__ import annotations
 
