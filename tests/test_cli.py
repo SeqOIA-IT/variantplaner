@@ -688,7 +688,36 @@ def test_generate_transmission_no_ped(tmp_path: pathlib.Path) -> None:
 
     assert result.exit_code == 0, result.output
 
-    truth = polars.read_parquet(DATA_DIR / "transmission.parquet").sort("id")
+    truth = polars.read_parquet(DATA_DIR / "transmission.parquet")
+    value = polars.read_parquet(transmission_path)
+
+    polars.testing.assert_frame_equal(truth, value, check_row_order=False, check_column_order=False)
+
+
+def test_generate_transmission_no_ped_multi_child(tmp_path: pathlib.Path) -> None:
+    """Run generate origin."""
+    transmission_path = tmp_path / "transmission_path.parquet"
+
+    runner = CliRunner()
+    result = runner.invoke(
+        cli.main,
+        [
+            "transmission",
+            "-g",
+            str(DATA_DIR / "no_info.genotypes.parquet"),
+            "-i",
+            "sample_1",
+            "-isample_3",
+            "-m",
+            "sample_2",
+            "-o",
+            str(transmission_path),
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+
+    truth = polars.read_parquet(DATA_DIR / "transmission_multi.parquet").sort("id")
     value = polars.read_parquet(transmission_path).sort("id")
 
     polars.testing.assert_frame_equal(truth, value, check_row_order=False, check_column_order=False)

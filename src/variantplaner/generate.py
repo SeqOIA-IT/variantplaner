@@ -3,6 +3,7 @@
 # std import
 from __future__ import annotations
 
+import itertools
 import logging
 
 # 3rd party import
@@ -19,7 +20,7 @@ gt2chr = {i: chr(i + 33) for i in range(94)}
 def transmission_ped(
     genotypes_lf: polars.LazyFrame,
     pedigree_lf: polars.LazyFrame,
-) -> polars.DataFrame:
+) -> polars.DataFrame | None:
     """Compute transmission of each variants.
 
     **Warning**: only the first sample with two parent are considered.
@@ -36,33 +37,22 @@ def transmission_ped(
     """
     pedigree_df = pedigree_lf.collect()
 
-    first_sample = pedigree_df.get_column("personal_id").to_list()[0]
-
     pedigree_df = pedigree_df.filter(polars.col("father_id").is_not_null() | polars.col("mother_id").is_not_null())
 
-    if pedigree_df.height > 0:
-        familly_info = pedigree_df.row(0, named=True)
-        return transmission(
-            genotypes_lf,
-            familly_info["personal_id"],
-            familly_info["mother_id"],
-            familly_info["father_id"],
-        )
-    familly_info = {"personal_id": first_sample, "mother_id": None, "father_id": None}
     return transmission(
         genotypes_lf,
-        first_sample,
-        None,
-        None,
+        tuple(pedigree_df.get_column("personal_id").to_list()),
+        tuple(pedigree_df.get_column("mother_id").to_list()),
+        tuple(pedigree_df.get_column("father_id").to_list()),
     )
 
 
 def transmission(
     genotypes_lf: polars.LazyFrame,
-    index_name: str,
-    mother_name: str | None = None,
-    father_name: str | None = None,
-) -> polars.DataFrame:
+    index_names: tuple[str],
+    mother_names: tuple[str | None] = (None,),
+    father_names: tuple[str | None] = (None,),
+) -> polars.DataFrame | None:
     """Compute how each variant are transmite to index case.
 
     Args:
@@ -81,16 +71,32 @@ def transmission(
     if "gt" not in genotypes_column:
         raise NoGTError("genotype polars.LazyFrame")
 
-    samples = sorted(genotypes_lf.select("sample").unique().collect().get_column("sample").to_list())
-
-    logger.debug(f"{samples=}")
-
     genotypes_df = genotypes_lf.collect()
 
-    index_df = (
-        genotypes_df.filter(polars.col("sample") == index_name)
-        .rename({colname: f"index_{colname}" for colname in genotypes_column})
-        .drop("sample")
+    dfs = []
+    for names in itertools.zip_longest(index_names, mother_names, father_names, fillvalue=None):
+        df = __trio(genotypes_df, genotypes_column, *names)
+        if df is not None:
+            dfs.append(df)
+
+    if len(dfs) > 0:
+        return polars.concat(dfs)
+    return None
+
+
+def __trio(
+    genotypes_df: polars.DataFrame,
+    genotypes_column: list[str],
+    index_name: str | None = None,
+    mother_name: str | None = None,
+    father_name: str | None = None,
+) -> polars.DataFrame | None:
+    """Compute transmission of one trio."""
+    if index_name is None:
+        return None
+
+    index_df = genotypes_df.filter(polars.col("sample") == index_name).rename(
+        {colname: f"index_{colname}" for colname in genotypes_column}
     )
 
     if mother_name is None:

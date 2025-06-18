@@ -33,6 +33,7 @@ if typing.TYPE_CHECKING:  # pragma: no cover
 
 logger = logging.getLogger("objects.vcf")
 
+
 class VcfParsingBehavior(enum.IntFlag):
     """Enumeration use to control behavior of IntoLazyFrame."""
 
@@ -147,7 +148,9 @@ class Vcf:
             for col in col2expr:
                 if col in col_index:
                     conversion.append(
-                        polars.col("value").list.get(col_index[col], null_on_oob=True).pipe(function=col2expr[col], col_name=col)
+                        polars.col("value")
+                        .list.get(col_index[col], null_on_oob=True)
+                        .pipe(function=col2expr[col], col_name=col)
                     )
                 else:
                     conversion.append(polars.lit("").pipe(function=col2expr[col], col_name=col))
