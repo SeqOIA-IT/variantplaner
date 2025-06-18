@@ -88,7 +88,6 @@ do
     variantplaner -t 4 vcf2parquet -i ${vcf_path} \
     variants -o variants/${sample_name}.parquet \
     genotypes -o genotypes/samples/${sample_name}.parquet \
-    -f GT:PS:DP:ADALL:AD:GQ
 done
 ```
 
@@ -193,18 +192,30 @@ For these step, we need to concatenate all genotypes of a AshkenazimTrio in one 
 ```bash
 pqrs merge -i genotypes/samples/HG002.parquet genotypes/samples/HG003.parquet genotypes/samples/HG004.parquet -o genotypes/samples/AshkenazimTrio.parquet
 mkdir -p genotypes/transmissions/
-variantplaner transmission -g genotypes/samples/AshkenazimTrio.parquet -i HG002 -m HG003 -f HG004 -o genotypes/transmissions/AshkenazimTrio.parquet
+variantplaner transmission -g genotypes/samples/AshkenazimTrio.parquet -c HG002 -m HG003 -f HG004 -o genotypes/transmissions/AshkenazimTrio.parquet
 ```
 
-`-I` parameter is use for index sample, `-m` parameter is use for mother sample, `-f` parameter is use for father sample only the index sample is mandatory if mother sample or father sample isn't present command work, you could also use a pedigree file with parameter `-p`.
+`-c` parameter is use for index sample, `-m` parameter is use for mother sample, `-f` parameter is use for father sample only the index sample is mandatory if mother sample or father sample isn't present command work, you could also use a pedigree file with parameter `-p`.
+
+If in your genotypes file you have multiple child or multiple trio you could repeat option `--child`, `--father` and `--mother`.
+
+Example
+```bash
+variantplaner transmission -g genotypes.parquet -o transmissions.parquet \
+-c child1 -m mother -f father \
+-c child2 -m mother -f father \
+-c child3
+```
+
+If all child have same parent you not need to repeat mother and father parameter.
 
 /// details | transmission parquet file content
 ```
-{id: 10201716324449815219, index_gt: 2, index_ps: null, index_dp: 1066, index_adall: [0, 284], index_ad: [118, 586], index_gq: 598, mother_gt: null, mother_ps: null, mother_dp: null, mother_adall: null, mother_ad: null, mother_gq: null, father_gt: null, father_ps: null, father_dp: null, father_adall: null, father_ad: null, father_gq: null, origin: "#~~"}
-{id: 8292180701257594706, index_gt: 1, index_ps: null, index_dp: 1122, index_adall: [177, 165], index_ad: [310, 283], index_gq: 556, mother_gt: null, mother_ps: null, mother_dp: null, mother_adall: null, mother_ad: null, mother_gq: null, father_gt: null, father_ps: null, father_dp: null, father_adall: null, father_ad: null, father_gq: null, origin: ""~~"}
-{id: 1728452411043401356, index_gt: 1, index_ps: null, index_dp: 1365, index_adall: [225, 222], index_ad: [348, 380], index_gq: 658, mother_gt: null, mother_ps: null, mother_dp: null, mother_adall: null, mother_ad: null, mother_gq: null, father_gt: null, father_ps: null, father_dp: null, father_adall: null, father_ad: null, father_gq: null, origin: ""~~"}
-{id: 4237549706021671868, index_gt: 1, index_ps: null, index_dp: 1019, index_adall: [154, 153], index_ad: [277, 282], index_gq: 517, mother_gt: null, mother_ps: null, mother_dp: null, mother_adall: null, mother_ad: null, mother_gq: null, father_gt: null, father_ps: null, father_dp: null, father_adall: null, father_ad: null, father_gq: null, origin: ""~~"}
-{id: 1361753917441299167, index_gt: 1, index_ps: null, index_dp: 1033, index_adall: [159, 170], index_ad: [265, 273], index_gq: 552, mother_gt: null, mother_ps: null, mother_dp: null, mother_adall: null, mother_ad: null, mother_gq: null, father_gt: null, father_ps: null, father_dp: null, father_adall: null, father_ad: null, father_gq: null, origin: ""~~"}
+{id: 73978904708120583, sample: "HG002", index_dp: 956, index_gq: 477, index_adall: [0, 252], index_ad: [80, 530], index_gt: 2, index_ps: null, mother_dp: 898, mother_gq: 547, mother_adall: [141, 142], mother_ad: [253, 236], mother_gt: 1, mother_ps: null, father_dp: 935, father_gq: 542, father_adall: [146, 124], father_ad: [246, 233], father_gt: 1, father_ps: null, origin: "#"""}
+{id: 73978997049917444, sample: "HG002", index_dp: 971, index_gq: 469, index_adall: [0, 253], index_ad: [77, 533], index_gt: 2, index_ps: null, mother_dp: 875, mother_gq: 559, mother_adall: [140, 135], mother_ad: [238, 234], mother_gt: 1, mother_ps: null, father_dp: 881, father_gq: 551, father_adall: [137, 128], father_ad: [222, 226], father_gt: 1, father_ps: null, origin: "#"""}
+{id: 73981277677551621, sample: "HG002", index_dp: 1016, index_gq: 483, index_adall: [0, 268], index_ad: [87, 571], index_gt: 2, index_ps: null, mother_dp: 877, mother_gq: 551, mother_adall: [140, 137], mother_ad: [236, 237], mother_gt: 1, mother_ps: null, father_dp: 933, father_gq: 594, father_adall: [150, 149], father_ad: [252, 261], father_gt: 1, father_ps: null, origin: "#"""}
+{id: 73981928365096967, sample: "HG002", index_dp: 999, index_gq: 595, index_adall: [0, 296], index_ad: [114, 551], index_gt: 2, index_ps: null, mother_dp: 969, mother_gq: 551, mother_adall: [174, 133], mother_ad: [299, 233], mother_gt: 1, mother_ps: null, father_dp: 948, father_gq: 555, father_adall: [131, 129], father_ad: [271, 275], father_gt: 1, father_ps: null, origin: "#"""}
+{id: 73982503890714628, sample: "HG002", index_dp: 1048, index_gq: 559, index_adall: [1, 317], index_ad: [59, 554], index_gt: 2, index_ps: null, mother_dp: 939, mother_gq: 554, mother_adall: [166, 145], mother_ad: [273, 231], mother_gt: 1, mother_ps: null, father_dp: 1017, father_gq: 564, father_adall: [139, 173], father_ad: [278, 271], father_gt: 1, father_ps: null, origin: "#"""}
 ```
 ///
 

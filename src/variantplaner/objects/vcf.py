@@ -102,7 +102,7 @@ class Vcf:
 
     def variants(self) -> Variants:
         """Get variants of vcf."""
-        return self.lf.select(Variants.minimal_schema())
+        return self.lf.select(Variants.minimal_schema().keys())
 
     def set_variants(self, variants: Variants) -> None:
         """Set variants of vcf."""

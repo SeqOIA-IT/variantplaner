@@ -30,9 +30,9 @@ from variantplaner import Pedigree, cli, generate
     type=click.Path(exists=True, readable=True, path_type=pathlib.Path),
 )
 @click.option(
-    "-i",
-    "--index",
-    help="Sample name of index.",
+    "-c",
+    "--child",
+    help="Sample name of child.",
     type=str,
     multiple=True,
 )
@@ -60,14 +60,14 @@ def transmission(
     genotypes_path: pathlib.Path,
     output_path: pathlib.Path,
     pedigree_path: pathlib.Path | None,
-    index: tuple[str] | None,
+    child: tuple[str] | None,
     mother: tuple[str] | None,
     father: tuple[str] | None,
 ) -> None:
     """Generate transmission of a genotype set."""
     logger = logging.getLogger("vcf2parquet.genotypes")
 
-    logger.debug(f"parameter: {genotypes_path=} {output_path=} {pedigree_path=} {index=} {mother=} {father=}")
+    logger.debug(f"parameter: {genotypes_path=} {output_path=} {pedigree_path=} {child=} {mother=} {father=}")
 
     genotypes_lf = polars.scan_parquet(genotypes_path)
 
@@ -75,12 +75,12 @@ def transmission(
         pedigree = Pedigree()
         pedigree.from_path(pedigree_path)
         transmission_lf: polars.DataFrame | None = generate.transmission_ped(genotypes_lf, pedigree.lf)
-    elif index:
+    elif child:
         transmission_lf = generate.transmission(
-            genotypes_lf, index, mother if mother is not None else (None,), father if father is not None else (None,)
+            genotypes_lf, child, mother if mother is not None else (None,), father if father is not None else (None,)
         )
     else:
-        logging.error("You must specify ped file or index almost sample name")
+        logging.error("You must specify ped file or child almost sample name")
         sys.exit(31)
 
     if transmission_lf is None:

@@ -168,7 +168,7 @@ def test_show_help_transmission() -> None:
 Options:
   -g, --genotypes-path PATH  Path to genotypes parquet.  [required]
   -p, --pedigree-path PATH   Path to pedigree file.
-  -i, --index TEXT           Sample name of index.
+  -c, --child TEXT           Sample name of child.
   -m, --mother TEXT          Sample name of mother.
   -f, --father TEXT          Sample name of father.
   -o, --output-path PATH     Path where transmission will be write.
