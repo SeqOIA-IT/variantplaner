@@ -87,7 +87,7 @@ do
     sample_name=$(basename ${vcf_path} .vcf.gz)
     variantplaner -t 4 vcf2parquet -i ${vcf_path} \
     variants -o variants/${sample_name}.parquet \
-    genotypes -o genotypes/samples/${sample_name}.parquet \
+    genotypes -o genotypes/samples/${sample_name}.parque
 done
 ```
 
@@ -97,7 +97,7 @@ We iterate over all vcf, variants are store in `variants/{sample_name}.parquet`,
 ```bash
 find vcf -type f -name *.vcf -exec basename {} .vcf \; | \
 parallel variantplaner -t 2 vcf2parquet -i vcf/{}.vcf \
-variants -o variants/{}.parquet genotypes -o genotypes/samples/{}.parquet -f GT:PS:DP:ADALL:AD:GQ
+variants -o variants/{}.parquet genotypes -o genotypes/samples/{}.parquet
 ```
 ///
 
