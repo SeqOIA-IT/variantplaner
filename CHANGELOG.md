@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+<!-- insertion marker -->
+## [0.5.0](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.5.0) - 2025-06-20
+
+<small>[Compare with 0.4.4](https://github.com/SeqOIA-IT/variantplaner/compare/0.4.4...0.5.0)</small>
+
+### Features
+
+- store info and format header associate to column in parquet metadata ([eca6812](https://github.com/SeqOIA-IT/variantplaner/commit/eca6812d44cb76e2b4e064882c70a47ccc11e482) by Pierre Marijon).
+- rename option index in child and add documentation ([047506b](https://github.com/SeqOIA-IT/variantplaner/commit/047506b62a3a8909c62a949820d84fba38b7f188) by Pierre Marijon).
+- transmission are run in any sample with a parent in ped file ([1032d3e](https://github.com/SeqOIA-IT/variantplaner/commit/1032d3ed608d677d5de1da3441ff76b69fcec2bf) by Pierre Marijon).
+- add support of any format ([7070977](https://github.com/SeqOIA-IT/variantplaner/commit/7070977b26a73ff96f5855d6e03885ef0cb1a0a2) by Pierre Marijon).
+- rename option index in child and add documentation ([4670526](https://github.com/SeqOIA-IT/variantplaner/commit/46705260c0ae22155c150707edcbabcfc6cbe7e4) by Pierre Marijon).
+
+### Bug Fixes
+
+- if column are missing in format return null ([762512a](https://github.com/SeqOIA-IT/variantplaner/commit/762512aeb22ccd4d4b902a5a939ff4a60b72f54c) by Pierre Marijon).
+- improve documentation ([762512a](https://github.com/SeqOIA-IT/variantplaner/commit/7b761390e676cda5b7d7f07a6d41ab6185cf7c70) by Pierre Marijon).
+
 ## [0.4.4](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.4.4) - 2025-05-20
 
 <small>[Compare with 0.4.3](https://github.com/SeqOIA-IT/variantplaner/compare/0.4.3...0.4.4)</small>

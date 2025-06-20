@@ -79,15 +79,12 @@ We split vcf in two part on for variant information and another for genotype inf
 
 ```bash
 mkdir -p variants genotypes/samples/
-```
-
-```
 for vcf_path in $(ls vcf/*.vcf.gz)
 do
     sample_name=$(basename ${vcf_path} .vcf.gz)
     variantplaner -t 4 vcf2parquet -i ${vcf_path} \
     variants -o variants/${sample_name}.parquet \
-    genotypes -o genotypes/samples/${sample_name}.parque
+    genotypes -o genotypes/samples/${sample_name}.parquet
 done
 ```
 
@@ -178,7 +175,7 @@ Here, we'll organize the genotypes information by variants to make it easier to 
 
 ```bash
 mkdir -p genotypes/variants/
-variantplaner -t 8 struct -i genotypes/samples/*.parquet -- genotypes -p genotypes/variants
+variantplaner -t 8 struct -i genotypes/samples/*.parquet -- genotypes -p genotypes/partitions
 ```
 
 All genotypes information are split in [hive like structure](https://duckdb.org/docs/data/partitioning/hive_partitioning) to optimize request on data, `--` after last input path are mandatory.
@@ -275,7 +272,12 @@ Header name are mandatory. Take care of chromosome order are the same between yo
 
 First convert your unique variants in parquet format (`variants.parquet`) in vcf:
 ```bash
-variantplaner -t 8 parquet2vcf -i variants.parquet -o variants.vcf
+mkdir -p unique_vcf
+for chr_path in $(ls uniq_variants/*.parquet)
+do
+    chr_name=$(basename ${chr_path} .parquet)
+    variantplaner -t 8 parquet2vcf -v ${chr_path} -o unique_vcf/${chr_name}.vcf
+done
 ```
 
 `parquet2vcf` subcommand have many more options but we didn't need it now.
@@ -285,10 +287,14 @@ Next annotate this `variants.vcf` [with snpeff](https://pcingola.github.io/SnpEf
 To convert annotated vcf in parquet, keep 'ANN' info column and rename vcf id column in snpeff\_id you can run:
 ```bash
 mkdir -p annotations
-variantplaner -t 8 vcf2parquet -c grch38.92.csv -i variants.snpeff.vcf annotations -o annotations/snpeff.parquet vcf -i ANN -r snpeff_id
+for annotations_path in $(ls snpeff_output/*.vcf)
+do
+    chr_name=$(basename ${annotations_path} .parquet)
+    variantplaner -t 8 vcf2parquet -c grch38.92.csv -i ${annotations_path} annotations -o annotations/${chr_name}.parquet -i ANN -r snpeff_id
+done
 ```
 
-If you didn't set any value of option `-i` in vcf subsubcommand all info column are keep.
+If you didn't set any value of option `-i` in annotations subsubcommand all info column are keep.
 
 ### Clinvar annotations
 
