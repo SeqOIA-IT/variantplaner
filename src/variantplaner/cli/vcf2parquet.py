@@ -146,6 +146,7 @@ def genotypes(
 
     lf = ctx.obj["lazyframe"]
     append = ctx.obj["append"]
+    headers_obj = ctx.obj["headers"]
 
     logger.debug(f"parameter: {output_path=}")
 
@@ -158,13 +159,16 @@ def genotypes(
     if append:
         genotypes_data = __append(output_path, genotypes_data)
 
+    schema = genotypes_data.lf.collect_schema()
+    metadata = headers_obj.build_metadata([n.lower() for n in schema.names()])
+
     logger.info(f"Start write genotypes in {output_path}")
     try:
-        genotypes_data.lf.sink_parquet(output_path, maintain_order=False)
+        genotypes_data.lf.sink_parquet(output_path, maintain_order=False, metadata=metadata)
     except polars.exceptions.InvalidOperationError:
-        genotypes_data.lf.collect(engine="cpu").write_parquet(output_path)
+        genotypes_data.lf.collect(engine="cpu").write_parquet(output_path, metadata=metadata)
     except polars.exceptions.ColumnNotFoundError:
-        genotypes_data.lf.collect(engine="cpu").write_parquet(output_path)
+        genotypes_data.lf.collect(engine="cpu").write_parquet(output_path, metadata=metadata)
     logger.info(f"End write genotypes in {output_path}")
 
 
@@ -217,13 +221,16 @@ def annotations_subcommand(
     if append:
         annotations_data = __append(output_path, annotations_data)
 
+    schema = annotations_data.collect_schema()
+    metadata = headers_obj.build_metadata([n.lower() for n in schema.names()])
+
     logger.info(f"Start write annotations in {output_path}")
     try:
-        annotations_data.sink_parquet(output_path, maintain_order=False)
+        annotations_data.sink_parquet(output_path, maintain_order=False, metadata=metadata)
     except polars.exceptions.InvalidOperationError:
-        annotations_data.collect(engine="cpu").write_parquet(output_path)
+        annotations_data.collect(engine="cpu").write_parquet(output_path, metadata=metadata)
     except polars.exceptions.ColumnNotFoundError:
-        annotations_data.collect(engine="cpu").write_parquet(output_path)
+        annotations_data.collect(engine="cpu").write_parquet(output_path, metadata=metadata)
     logger.info(f"End write annotations in {output_path}")
 
 

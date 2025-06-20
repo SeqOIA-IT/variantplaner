@@ -124,6 +124,16 @@ def test_vcf2parquet(tmp_path: pathlib.Path) -> None:
         assert truth.dtypes() == lf.dtypes()
         assert truth.len() == lf.len()
 
+    # read metadata and check it
+    metadata = polars.read_parquet_metadata(genotypes_path)
+    del metadata["ARROW:schema"]
+    assert metadata == {
+        "ad": 'FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the ref and alt alleles in the order listed">',
+        "dp": 'FORMAT=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth (reads with MQ=255 or with bad mates are filtered)">',
+        "gq": 'FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">',
+        "gt": 'FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">',
+    }
+
 
 def test_vcf2parquet_ask_annotations(tmp_path: pathlib.Path) -> None:
     """Ask annotations vcf2parquet run."""
@@ -149,6 +159,7 @@ def test_vcf2parquet_ask_annotations(tmp_path: pathlib.Path) -> None:
     )
 
     assert result.exit_code == 0, result.output
+
     polars.testing.assert_frame_equal(
         polars.scan_parquet(DATA_DIR / "no_genotypes.variants.parquet"),
         polars.scan_parquet(variants_path),
@@ -160,6 +171,33 @@ def test_vcf2parquet_ask_annotations(tmp_path: pathlib.Path) -> None:
         polars.scan_parquet(annotations_path).sort("id"),
         check_column_order=False,
     )
+
+    # read metadata and check it
+    metadata = polars.read_parquet_metadata(annotations_path)
+    del metadata["ARROW:schema"]
+    assert metadata == {
+        "af_esp": 'INFO=<ID=AF_ESP,Number=1,Type=Float,Description="allele frequencies from GO-ESP">',
+        "af_exac": 'INFO=<ID=AF_EXAC,Number=1,Type=Float,Description="allele frequencies from ExAC">',
+        "af_tgp": 'INFO=<ID=AF_TGP,Number=1,Type=Float,Description="allele frequencies from TGP">',
+        "alleleid": 'INFO=<ID=ALLELEID,Number=1,Type=Integer,Description="the ClinVar Allele ID">',
+        "clndisdb": 'INFO=<ID=CLNDISDB,Number=.,Type=String,Description="Tag-value pairs of disease database name and identifier, e.g. OMIM:NNNNNN">',
+        "clndisdbincl": 'INFO=<ID=CLNDISDBINCL,Number=.,Type=String,Description="For included Variant: Tag-value pairs of disease database name and identifier, e.g. OMIM:NNNNNN">',
+        "clndn": 'INFO=<ID=CLNDN,Number=.,Type=String,Description="ClinVar\'s preferred disease name for the concept specified by disease identifiers in CLNDISDB">',
+        "clndnincl": 'INFO=<ID=CLNDNINCL,Number=.,Type=String,Description="For included Variant : ClinVar\'s preferred disease name for the concept specified by disease identifiers in CLNDISDB">',
+        "clnhgvs": 'INFO=<ID=CLNHGVS,Number=.,Type=String,Description="Top-level (primary assembly, alt, or patch) HGVS expression.">',
+        "clnrevstat": 'INFO=<ID=CLNREVSTAT,Number=.,Type=String,Description="ClinVar review status for the Variation ID">',
+        "clnsig": 'INFO=<ID=CLNSIG,Number=.,Type=String,Description="Clinical significance for this single variant; multiple values are separated by a vertical bar">',
+        "clnsigconf": 'INFO=<ID=CLNSIGCONF,Number=.,Type=String,Description="Conflicting clinical significance for this single variant; multiple values are separated by a vertical bar">',
+        "clnsigincl": 'INFO=<ID=CLNSIGINCL,Number=.,Type=String,Description="Clinical significance for a haplotype or genotype that includes this variant. Reported as pairs of VariationID:clinical significance; multiple values are separated by a vertical bar">',
+        "clnvc": 'INFO=<ID=CLNVC,Number=1,Type=String,Description="Variant type">',
+        "clnvcso": 'INFO=<ID=CLNVCSO,Number=1,Type=String,Description="Sequence Ontology id for variant type">',
+        "clnvi": 'INFO=<ID=CLNVI,Number=.,Type=String,Description="the variant\'s clinical sources reported as tag-value pairs of database and variant identifier">',
+        "dbvarid": 'INFO=<ID=DBVARID,Number=.,Type=String,Description="nsv accessions from dbVar for the variant">',
+        "geneinfo": 'INFO=<ID=GENEINFO,Number=1,Type=String,Description="Gene(s) for the variant reported as gene symbol:gene id. The gene symbol and id are delimited by a colon (:) and each pair is delimited by a vertical bar (|)">',
+        "mc": 'INFO=<ID=MC,Number=.,Type=String,Description="comma separated list of molecular consequence in the form of Sequence Ontology ID|molecular_consequence">',
+        "origin": 'INFO=<ID=ORIGIN,Number=.,Type=String,Description="Allele origin. One or more of the following values may be added: 0 - unknown; 1 - germline; 2 - somatic; 4 - inherited; 8 - paternal; 16 - maternal; 32 - de-novo; 64 - biparental; 128 - uniparental; 256 - not-tested; 512 - tested-inconclusive; 1073741824 - other">',
+        "rs": 'INFO=<ID=RS,Number=.,Type=String,Description="dbSNP ID (i.e. rs number)">',
+    }
 
 
 def test_vcf2parquet_not_ask_genotypes(tmp_path: pathlib.Path) -> None:

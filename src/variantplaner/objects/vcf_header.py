@@ -20,6 +20,13 @@ if typing.TYPE_CHECKING:  # pragma: no cover
 MINIMAL_COL_NUMBER: int = 8
 SAMPLE_COL_BEGIN: int = 9
 
+INFO_RE: typing.Pattern = re.compile(
+    r"ID=(?P<id>([A-Za-z_][0-9A-Za-z_.]*|1000G)),Number=(?P<number>[ARG0-9\.]+),Type=(?P<type>Integer|Float|String|Character)",
+)
+FORMAT_RE: typing.Pattern = re.compile(
+    "ID=(?P<id>[A-Za-z_][0-9A-Za-z_.]*),Number=(?P<number>[ARG0-9\\.]+),Type=(?P<type>Integer|Float|String|Character)",
+)
+
 
 class VcfHeader:
     """Object that parse and store vcf information."""
@@ -84,10 +91,6 @@ class VcfHeader:
         Raises:
         NotVcfHeaderError: If all line not start by '#CHR'
         """
-        info_re = re.compile(
-            r"ID=(?P<id>([A-Za-z_][0-9A-Za-z_.]*|1000G)),Number=(?P<number>[ARG0-9\.]+),Type=(?P<type>Integer|Float|String|Character)",
-        )
-
         expressions: list[polars.Expr] = []
 
         for line in self._header:
@@ -97,7 +100,7 @@ class VcfHeader:
             if not line.startswith("##INFO"):
                 continue
 
-            if (search := info_re.search(line)) and (not select_info or search["id"] in select_info):
+            if (search := INFO_RE.search(line)) and (not select_info or search["id"] in select_info):
                 regex = rf"{search['id']}=([^;]+);?"
 
                 local_expr = polars.col("info").str.extract(regex, 1)
@@ -146,10 +149,6 @@ class VcfHeader:
         Raises:
         NotVcfHeaderError: If all line not start by '#CHR'
         """
-        format_re = re.compile(
-            "ID=(?P<id>[A-Za-z_][0-9A-Za-z_.]*),Number=(?P<number>[ARG0-9\\.]+),Type=(?P<type>Integer|Float|String|Character)",
-        )
-
         expressions: dict[str, typing.Callable[[polars.Expr, str], polars.Expr]] = {}
 
         for line in self._header:
@@ -159,7 +158,7 @@ class VcfHeader:
             if not line.startswith("##FORMAT"):
                 continue
 
-            if (search := format_re.search(line)) and (not select_format or search["id"] in select_format):
+            if (search := FORMAT_RE.search(line)) and (not select_format or search["id"] in select_format):
                 name = search["id"]
                 number = search["number"]
                 format_type = search["type"]
@@ -234,6 +233,36 @@ class VcfHeader:
         if number_of_column > MINIMAL_COL_NUMBER and (samples := self.samples_index):
             yield "format"
             yield from (sample for (sample, _) in samples.items())
+
+    def build_metadata(self, select_columns: list[str] | None = None) -> dict[str, str]:
+        """Generate metadata associate to vcf_header.
+
+        Args:
+        select_columns: Output only columns in this list.
+
+        Returns: An associations map for column name to corresponding header line
+        """
+        metadata: dict[str, str] = {}
+
+        for line in self._header:
+            if line.startswith("#CHROM"):
+                return metadata
+
+            if (
+                (line.startswith("##FORMAT"))
+                and (search := FORMAT_RE.search(line))
+                and (not select_columns or search["id"].lower() in select_columns)
+            ):
+                metadata[search["id"].lower()] = line.lstrip("#")
+
+            if (
+                line.startswith("##INFO")
+                and (search := INFO_RE.search(line))
+                and (not select_columns or search["id"].lower() in select_columns)
+            ):
+                metadata[search["id"].lower()] = line.lstrip("#")
+
+        return metadata
 
     @staticmethod
     def __format_gt(expr: polars.Expr, /, col_name: str) -> polars.Expr:
