@@ -97,8 +97,10 @@ def main(ctx: click.Context, *, threads: int = 1, verbose: int = 0, debug_info: 
 
 
 # module import required after main definition
-from variantplaner.cli import metadata  # noqa: E402 F401 I001 these import should be here
-from variantplaner.cli import parquet2vcf  # noqa: E402 F401  these import should be here
-from variantplaner.cli import struct  # noqa: E402 F401  these import should be here
-from variantplaner.cli import transmission  # noqa: E402 F401  these import should be here
-from variantplaner.cli import vcf2parquet  # noqa: E402 F401  these import should be here
+from variantplaner.cli import (  # noqa: E402  these import should be here
+    metadata,  # noqa: F401 these import should be here
+    parquet2vcf,  # noqa: F401  these import should be here
+    struct,  # noqa: F401  these import should be here
+    transmission,  # noqa: F401  these import should be here
+    vcf2parquet,  # noqa: F401  these import should be here
+)

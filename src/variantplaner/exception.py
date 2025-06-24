@@ -59,3 +59,19 @@ class NoGTError(Exception):
     def __init__(self, message: str):
         """Initialize no gt error."""
         super().__init__(f"In {message} gt column is missing.")
+
+
+class NoDPError(Exception):
+    """Exception raise if genotype polars.LazyFrame not contains dp column."""
+
+    def __init__(self):
+        """Initialize no dp error."""
+        super().__init__("LazyFrame seems not contains deepth coverage information.")
+
+
+class NoGQError(Exception):
+    """Exception raise if genotype polars.LazyFrame not contains gq column."""
+
+    def __init__(self):
+        """Initialize no gq error."""
+        super().__init__("LazyFrame seems not contains quality information.")
