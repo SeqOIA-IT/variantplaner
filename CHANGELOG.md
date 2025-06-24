@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Features
 
 - store info and format header associate to column in parquet metadata ([eca6812](https://github.com/SeqOIA-IT/variantplaner/commit/eca6812d44cb76e2b4e064882c70a47ccc11e482) by Pierre Marijon).
-- rename option index in child and add documentation ([047506b](https://github.com/SeqOIA-IT/variantplaner/commit/047506b62a3a8909c62a949820d84fba38b7f188) by Pierre Marijon).
 - transmission are run in any sample with a parent in ped file ([1032d3e](https://github.com/SeqOIA-IT/variantplaner/commit/1032d3ed608d677d5de1da3441ff76b69fcec2bf) by Pierre Marijon).
 - add support of any format ([7070977](https://github.com/SeqOIA-IT/variantplaner/commit/7070977b26a73ff96f5855d6e03885ef0cb1a0a2) by Pierre Marijon).
 - rename option index in child and add documentation ([4670526](https://github.com/SeqOIA-IT/variantplaner/commit/46705260c0ae22155c150707edcbabcfc6cbe7e4) by Pierre Marijon).

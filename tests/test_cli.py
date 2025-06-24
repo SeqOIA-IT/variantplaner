@@ -277,7 +277,7 @@ def test_vcf2parquet_no_genotype(tmp_path: pathlib.Path) -> None:
         ],
     )
 
-    assert result.exit_code == 12
+    assert result.exit_code == 14
 
 
 def test_vcf2parquet_sv(tmp_path: pathlib.Path) -> None:

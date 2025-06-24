@@ -115,6 +115,7 @@ Options:
 
 Commands:
   annotations  Write annotations.
+  coverages    Write coverages.
   genotypes    Write genotypes.
   headers      Write vcf headers.
   variants     Write variants.

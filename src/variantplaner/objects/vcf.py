@@ -102,7 +102,7 @@ class Vcf:
 
     def variants(self) -> Variants:
         """Get variants of vcf."""
-        return self.lf.select(Variants.minimal_schema().keys())
+        return Variants(self.lf.select(Variants.minimal_schema().keys()))
 
     def set_variants(self, variants: Variants) -> None:
         """Set variants of vcf."""
@@ -159,15 +159,12 @@ class Vcf:
 
             sublfs.append(sublf)
 
-        genotypes = Genotypes()
         lf = polars.concat(sublfs).drop("variable", "value")
 
         if "gt".upper() in col2expr:
             lf = lf.filter(polars.col("gt") != 0)
 
-        genotypes.lf = lf
-
-        return genotypes
+        return Genotypes(lf)
 
     def add_genotypes(self, genotypes_lf: Genotypes) -> None:
         """Add genotypes information in vcf."""
