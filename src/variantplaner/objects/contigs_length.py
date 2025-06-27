@@ -11,6 +11,12 @@ import polars
 
 # project import
 from variantplaner.objects.csv import Csv
+from variantplaner.exception import (
+    NoContigsLengthInformationError,
+    NoGenotypeError,
+    NotAVCFError,
+    NotVcfHeaderError,
+)
 
 if typing.TYPE_CHECKING:
     import pathlib
@@ -37,6 +43,28 @@ class ContigsLength:
                 "offset": polars.UInt64,
             }
         )
+
+    def from_vcf_header_and_path(self, header: VcfHeader, path: pathlib.Path | None) -> int:
+        """Fill an object with VcfHeader or content of file in path.
+
+        Argument:
+          header: VcfHeader
+          path: path of input file
+
+        Returns: Number of contigs line view
+        """
+        if path is not None:
+            from_path = self.from_path(path)
+            if from_path != 0:
+                return from_path
+
+            from_header = self.from_header(self.header)
+            if from_header != 0:
+                return from_header
+
+            raise NoContigsLengthInformationError
+        elif self.from_vcf_header(self.header) == 0:
+            raise NoContigsLengthInformationError
 
     def from_vcf_header(self, header: VcfHeader) -> int:
         """Fill a object with VcfHeader.

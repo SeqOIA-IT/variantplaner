@@ -14,7 +14,6 @@ import xopen
 # project import
 from variantplaner import normalization
 from variantplaner.exception import (
-    NoContigsLengthInformationError,
     NoGenotypeError,
     NotAVCFError,
     NotVcfHeaderError,
@@ -70,11 +69,7 @@ class Vcf:
                 raise NotAVCFError(path) from e
 
         chr2len = ContigsLength()
-        if chr2len_path is not None:
-            if chr2len.from_path(chr2len_path) == 0 and chr2len.from_vcf_header(self.header) == 0:
-                raise NoContigsLengthInformationError
-        elif chr2len.from_vcf_header(self.header) == 0:
-            raise NoContigsLengthInformationError
+        chr2len.from_vcf_header_and_path(self.header, chr2len_path)
 
         self.lf = polars.scan_csv(
             path,
@@ -99,6 +94,15 @@ class Vcf:
 
         if behavior & VcfParsingBehavior.MANAGE_SV:
             self.lf = self.lf.drop("SVTYPE", "SVLEN", strict=False)
+
+    def from_lazyframe(
+            self,
+            lf: polars.LazyFrame,
+            chr2len: ContigsLength,
+            behavior: VcfParsingBehavior = VcfParsingBehavior.NOTHING,
+    ) -> None:
+        """Populate Vcf object with object."""
+
 
     def variants(self) -> Variants:
         """Get variants of vcf."""
