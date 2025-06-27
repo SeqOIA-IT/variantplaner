@@ -9,14 +9,12 @@ import typing
 # 3rd party import
 import polars
 
-# project import
-from variantplaner.objects.csv import Csv
 from variantplaner.exception import (
     NoContigsLengthInformationError,
-    NoGenotypeError,
-    NotAVCFError,
-    NotVcfHeaderError,
 )
+
+# project import
+from variantplaner.objects.csv import Csv
 
 if typing.TYPE_CHECKING:
     import pathlib
@@ -58,13 +56,15 @@ class ContigsLength:
             if from_path != 0:
                 return from_path
 
-            from_header = self.from_header(self.header)
+            from_header = self.from_vcf_header(header)
             if from_header != 0:
                 return from_header
 
             raise NoContigsLengthInformationError
-        elif self.from_vcf_header(self.header) == 0:
+        if self.from_vcf_header(header) == 0:
             raise NoContigsLengthInformationError
+
+        return 0
 
     def from_vcf_header(self, header: VcfHeader) -> int:
         """Fill a object with VcfHeader.

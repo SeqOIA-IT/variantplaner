@@ -5,16 +5,17 @@ from __future__ import annotations
 
 import logging
 import pathlib
+import sys
 
 # 3rd party import
 import click
 import polars
 
 # project import
-from variantplaner import Vcf, cli
+from variantplaner import ContigsLength, Vcf, cli, exception, normalization
 
 
-@cli.main.group("gvcf2parquet", chain=True)
+@cli.main.group("gvcf2parquet", chain=True)  # type: ignore[has-type]
 @click.pass_context
 @click.option(
     "-i",
@@ -74,37 +75,65 @@ def variants(
     vcf = ctx.obj["lazyframe"]
     chrom2length_path = ctx.obj["chrom2length_path"]
 
-
     logger.info(f"parameter: {output_path=}")
 
     chr2len = ContigsLength()
-    if chr2len_path is not None:
-        if chr2len.from_path(chr2len_path) == 0 and chr2len.from_vcf_header(self.header) == 0:
-            raise NoContigsLengthInformationError
-        elif chr2len.from_vcf_header(self.header) == 0:
-            raise NoContigsLengthInformationError
+    chr2len.from_vcf_header_and_path(vcf.header, chrom2length_path)
 
-
-
-    vcf.lf = (
-        vcf.lf
-        .filter(polars.col("alt")!="<NON_REF>")
-        .with_columns(
-            alt = polars.col("alt").str.replace(",<NON_REF>", "")
-        )
+    local_vcf_lf = vcf.lf.filter(polars.col("alt") != "<NON_REF>").with_columns(
+        alt=polars.col("alt").str.replace(",<NON_REF>", "")
     )
-    vcf.lf = normalization.add_variant_id(vcf.lf, chr2len.lf)
-    print(vcf.lf.select("id", "chr", "pos", "ref", "alt").collect())
+    local_vcf_lf = normalization.add_variant_id(vcf.lf, chr2len.lf)
 
-    variants = vcf.variants()
+    variants = local_vcf_lf
 
     try:
-        variants.lf.sink_parquet(output_path)
+        variants.sink_parquet(output_path)
     except polars.exceptions.InvalidOperationError:
-        variants.lf.collect().write_parquet(output_path)
+        variants.collect().write_parquet(output_path)
     except polars.exceptions.ColumnNotFoundError:
-        variants.lf.collect().write_parquet(output_path)
+        variants.collect().write_parquet(output_path)
     logger.info(f"End write variants in {output_path}")
+
+
+@gvcf2parquet.command("genotypes")
+@click.pass_context
+@click.option(
+    "-o",
+    "--output-path",
+    help="Path where genotypes will be written.",
+    type=click.Path(writable=True, path_type=pathlib.Path),
+    required=True,
+)
+def genotypes(
+    ctx: click.Context,
+    output_path: pathlib.Path,
+) -> None:
+    """Write genotypes."""
+    logger = logging.getLogger("vcf2parquet.genotypes")
+
+    lf = ctx.obj["lazyframe"]
+    headers_obj = lf.header
+
+    logger.debug(f"parameter: {output_path=}")
+
+    try:
+        genotypes_data = lf.genotypes()
+    except exception.NoGenotypeError:
+        logger.error("It's seems vcf not contains genotypes information.")  # noqa: TRY400  we are in cli exception isn't readable
+        sys.exit(14)
+
+    schema = genotypes_data.lf.collect_schema()
+    metadata = headers_obj.build_metadata([n.lower() for n in schema.names()])
+
+    logger.info(f"Start write genotypes in {output_path}")
+    try:
+        genotypes_data.lf.sink_parquet(output_path, maintain_order=False, metadata=metadata)
+    except polars.exceptions.InvalidOperationError:
+        genotypes_data.lf.collect(engine="cpu").write_parquet(output_path, metadata=metadata)
+    except polars.exceptions.ColumnNotFoundError:
+        genotypes_data.lf.collect(engine="cpu").write_parquet(output_path, metadata=metadata)
+    logger.info(f"End write genotypes in {output_path}")
 
 
 @gvcf2parquet.command("coverage")
@@ -121,8 +150,34 @@ def coverage(
     output_path: pathlib.Path,
 ) -> None:
     """Write coverage."""
-    logger = logging.getLogger("vcf2parquet.coverage")
+    logger = logging.getLogger("gvcf2parquet.coverage")
 
-    _lf = ctx.obj["lazyframe"]
+    lf = ctx.obj["lazyframe"]
 
-    logger.debug(f"parameter: {output_path=}")
+    variants = lf.variants()
+
+    try:
+        genotypes_data = lf.genotypes()
+    except exception.NoGenotypeError:
+        logger.error("It's seems vcf not contains genotypes information.")  # noqa: TRY400  we are in cli exception isn't readable
+        sys.exit(14)
+
+    try:
+        coverages = genotypes_data.coverages(variants)
+    except exception.NoDPError:
+        logger.error("It's seems vcf not contains coverage information.")  # noqa: TRY400  we are in cli exception isn't readable
+        sys.exit(15)
+    except exception.NoGQError:
+        logger.error("It's seems vcf not contains genotypes information.")  # noqa: TRY400  we are in cli exception isn't readable
+        sys.exit(16)
+
+    # coverages.fill_gap()
+
+    logger.info(f"Start write annotations in {output_path}")
+    try:
+        coverages.lf.sink_parquet(output_path, maintain_order=False)
+    except polars.exceptions.InvalidOperationError:
+        coverages.lf.collect(engine="cpu").write_parquet(output_path)
+    except polars.exceptions.ColumnNotFoundError:
+        coverages.lf.collect(engine="cpu").write_parquet(output_path)
+    logger.info(f"End write annotations in {output_path}")

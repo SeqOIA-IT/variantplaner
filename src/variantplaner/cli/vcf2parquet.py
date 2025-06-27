@@ -89,7 +89,6 @@ def vcf2parquet(
     ctx.obj["vcf_path"] = input_path
     ctx.obj["lazyframe"] = lf
     ctx.obj["append"] = append
-    ctx.obj["headers"] = lf.header
 
 
 @vcf2parquet.command("variants")
@@ -146,7 +145,7 @@ def genotypes(
 
     lf = ctx.obj["lazyframe"]
     append = ctx.obj["append"]
-    headers_obj = ctx.obj["headers"]
+    headers_obj = lf.header
 
     logger.debug(f"parameter: {output_path=}")
 
@@ -205,7 +204,7 @@ def annotations_subcommand(
 
     lf = ctx.obj["lazyframe"]
     append = ctx.obj["append"]
-    headers_obj = ctx.obj["headers"]
+    headers_obj = lf.header
 
     logger.debug(f"parameter: {output_path=}")
 
@@ -297,7 +296,7 @@ def headers(
     """Write vcf headers."""
     logger = logging.getLogger("vcf2parquet.headers")
 
-    headers_obj = ctx.obj["headers"]
+    headers_obj = ctx.obj["lf"].header
 
     logger.debug(f"parameter: {output_path=}")
 

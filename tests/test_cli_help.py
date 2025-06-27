@@ -31,6 +31,7 @@ Options:
   -h, --help                   Show this message and exit.
 
 Commands:
+  gvcf2parquet  Convert a gvcf in parquet.
   metadata      Convert metadata file in parquet file.
   parquet2vcf   Convert variant parquet in vcf.
   struct        Subcommand to made struct operation on parquet file.
