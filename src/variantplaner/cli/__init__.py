@@ -98,6 +98,7 @@ def main(ctx: click.Context, *, threads: int = 1, verbose: int = 0, debug_info: 
 
 # module import required after main definition
 from variantplaner.cli import (  # noqa: E402  these import should be here
+    gvcf2parquet,  # noqa: F401  these import should be here
     metadata,  # noqa: F401 these import should be here
     parquet2vcf,  # noqa: F401  these import should be here
     struct,  # noqa: F401  these import should be here
