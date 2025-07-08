@@ -37,7 +37,8 @@ def transmission_ped(
     """
     pedigree_df = pedigree_lf.collect()
 
-    pedigree_df = pedigree_df.filter(polars.col("father_id").is_not_null() | polars.col("mother_id").is_not_null())
+    if pedigree_df.height > 1:
+        pedigree_df = pedigree_df.filter(polars.col("father_id").is_not_null() | polars.col("mother_id").is_not_null())
 
     return transmission(
         genotypes_lf,

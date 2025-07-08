@@ -399,4 +399,7 @@ def test_one_line_ped() -> None:
 
     transmission = generate.transmission_ped(genotypes_lf, pedigree.lf)
 
-    assert transmission is None
+    assert transmission is not None
+    assert transmission.get_column("index_gt").to_list() == [1]
+    assert transmission.get_column("father_gt").to_list() == [None]
+    assert transmission.get_column("mother_gt").to_list() == [None]
