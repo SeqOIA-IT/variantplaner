@@ -6,7 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-<!-- insertion marker -->
+## [0.5.1](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.5.1) - 2025-07-21
+
+<small>[Compare with 0.5.0](https://github.com/SeqOIA-IT/variantplaner/compare/0.5.0...0.5.1)</small>
+
+### Bug Fixes
+
+- in struct subcommand order of columns are choose by the first parquet read. ([8743094](https://github.com/SeqOIA-IT/variantplaner/commit/8743094bb0c359dedc62790e82780baaadf8fa01) by Pierre Marijon).
+- show submodule ([c13ffd0](https://github.com/SeqOIA-IT/variantplaner/commit/c13ffd001617f6e8d2fb519026260b4a9abacf35) by Pierre Marijon).
+- if ped file contain only one line transmissions contains only child genotypes ([7ba20bc](https://github.com/SeqOIA-IT/variantplaner/commit/7ba20bc50dcda549bc6fd70066e198824db0ff4d) by Pierre Marijon).
+
 ## [0.5.0](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.5.0) - 2025-06-20
 
 <small>[Compare with 0.4.4](https://github.com/SeqOIA-IT/variantplaner/compare/0.4.4...0.5.0)</small>
