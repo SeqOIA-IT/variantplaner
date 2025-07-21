@@ -56,7 +56,19 @@ def __merge_split_unique(paths: list[pathlib.Path], out_prefix: pathlib.Path) ->
 
     chr_names = set()
 
-    lf = polars.concat([polars.scan_parquet(path) for path in paths])
+    lfs = []
+    column_order = None
+    for path in paths:
+        if not path.is_file():
+            continue
+
+        lf = polars.scan_parquet(path, hive_partitioning=False)
+        if column_order is None:
+            column_order = lf.collect_schema().names()
+
+        lfs.append(lf.select(column_order))
+
+    lf = polars.concat(lfs)
     for (chr_name, *_), df_group in lf.collect().group_by(polars.col("chr")):
         chr_names.add(str(chr_name))
         df_group.unique(subset=("pos", "ref", "alt")).write_parquet(out_prefix / f"{chr_name}.parquet")

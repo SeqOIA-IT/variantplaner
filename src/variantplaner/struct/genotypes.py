@@ -65,7 +65,17 @@ def __merge_file(prefix: pathlib.Path, basenames: list[str], append: bool) -> No
 
     logger.info(f"{paths=}")
 
-    lfs = [polars.scan_parquet(path, hive_partitioning=False) for path in paths if path.is_file()]
+    lfs = []
+    column_order = None
+    for path in paths:
+        if not path.is_file():
+            continue
+
+        lf = polars.scan_parquet(path, hive_partitioning=False)
+        if column_order is None:
+            column_order = lf.collect_schema().names()
+
+        lfs.append(lf.select(column_order))
 
     logger.info(f"{lfs=}")
     if lfs:
