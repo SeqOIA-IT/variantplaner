@@ -146,3 +146,48 @@ def test_hive_append(tmp_path: pathlib.Path) -> None:
     assert sorted(value.get_column("gq").fill_null(0).to_list()) == sorted(
         truth.get_column("gq").fill_null(0).to_list(),
     )
+
+
+def test_hive_column_order(tmp_path: pathlib.Path) -> None:
+    """Check partition genotype parquet."""
+    tmp_path_one = tmp_path / "one_reorder.g.parget"
+    tmp_path_two = tmp_path / "two_reorder.g.parget"
+
+    df = polars.read_parquet(DATA_DIR / "one.g.parquet")
+    column_order = sorted(df.schema.names())
+    df = df.select(column_order)
+    df.write_parquet(tmp_path_one)
+
+    df = polars.read_parquet(DATA_DIR / "two.g.parquet")
+    column_order.reverse()
+    df = df.select(column_order)
+    df.write_parquet(tmp_path_two)
+
+    struct.genotypes.hive(
+        [
+            tmp_path_one,
+            tmp_path_two,
+        ],
+        tmp_path / "partitions",
+        2,
+        1,
+        append=False,
+    )
+
+    partition_paths = set(__scantree(tmp_path / "partitions"))
+
+    value = polars.concat([polars.read_parquet(path, hive_partitioning=False).select(column_order) for path in partition_paths])
+
+    truth = polars.concat(
+        [
+            polars.read_parquet(DATA_DIR / "one.g.parquet"),
+            polars.read_parquet(DATA_DIR / "two.g.parquet"),
+        ],
+    )
+
+    truth = truth.select(column_order)
+
+    value = value.sort(by="id")
+    truth = truth.sort(by="id")
+
+    polars.testing.assert_frame_equal(value, truth, check_row_order=False, check_column_order=False)

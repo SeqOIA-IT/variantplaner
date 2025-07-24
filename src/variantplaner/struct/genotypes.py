@@ -50,7 +50,7 @@ def __merge_file(prefix: pathlib.Path, basenames: list[str], append: bool) -> No
     """Subprocess that merge file generate by __id_spliting.
 
     Args:
-        prefix: prefix of hive struct
+        prefix: pyrefix of hive struct
         basenames: list of all basenames
 
     Returns:
@@ -132,7 +132,20 @@ def hive(
         variantplaner.any2string(hash("_".join(p.stem for p in g_paths if p is not None))) for g_paths in path_groups
     ]
 
-    lf_groups = [[polars.scan_parquet(p) for p in g_paths if p is not None] for g_paths in path_groups]
+    column_order = None
+    lf_groups = []
+    for g_paths in path_groups:
+        group = []
+        for p in g_paths:
+            if p is None:
+                continue
+
+            lf = polars.scan_parquet(p, hive_partitioning=False)
+            if column_order is None:
+                column_order = lf.collect_schema().names()
+            group.append(lf.select(column_order))
+
+        lf_groups.append(group)
 
     logger.info(f"{path_groups=}, {basenames=}")
 
