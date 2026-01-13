@@ -71,11 +71,18 @@ def struct(ctx: click.Context, input_paths: list[pathlib.Path], *, append: bool)
     default=4,
     show_default=True,
 )
+@click.option(
+    "-n",
+    "--new-variants",
+    help="If append mode is set, variant not in previous file are write in this files.",
+    type=click.Path(exists=True, dir_okay=False, readable=True, path_type=pathlib.Path),
+)
 def variants(
     ctx: click.Context,
     output_prefix: pathlib.Path,
     chunk_size: int,
     polars_threads: int,
+    new_variants: pathlib.Path | None,
 ) -> None:
     """Merge multiple variants parquet file in one.
 
@@ -90,7 +97,9 @@ def variants(
 
     logger.debug(f"parameter: {output_prefix=} {chunk_size=}")
 
-    vp_struct.variants.merge(input_paths, output_prefix, chunk_size, polars_threads, append=append)
+    vp_struct.variants.merge(
+        input_paths, output_prefix, chunk_size, polars_threads, append=append, new_variants=new_variants
+    )
 
 
 @struct.command("genotypes")

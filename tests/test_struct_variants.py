@@ -132,6 +132,7 @@ def test_merge(tmp_path: pathlib.Path) -> None:
         ],
         out_prefix,
         append=False,
+        new_variants=None,
     )
 
     lf = polars.concat([polars.scan_parquet(entry.path) for entry in os.scandir(out_prefix) if entry.is_file()])
@@ -152,6 +153,7 @@ def test_merge_append(tmp_path: pathlib.Path) -> None:
         ],
         out_prefix,
         append=False,
+        new_variants=None,
     )
 
     lf = polars.concat([polars.scan_parquet(entry.path) for entry in os.scandir(out_prefix) if entry.is_file()])
@@ -164,6 +166,7 @@ def test_merge_append(tmp_path: pathlib.Path) -> None:
         ],
         out_prefix,
         append=True,
+        new_variants=None,
     )
 
     lf_sv = polars.scan_parquet(DATA_DIR / "sv.variants.parquet")
@@ -172,3 +175,44 @@ def test_merge_append(tmp_path: pathlib.Path) -> None:
     lf = polars.concat([polars.scan_parquet(entry.path) for entry in os.scandir(out_prefix) if entry.is_file()])
 
     assert set(lf.collect().get_column("id").to_list()) == sv_merge
+
+
+def test_merge_append_new_variant(tmp_path: pathlib.Path) -> None:
+    """Check merge append."""
+    out_prefix = tmp_path / "merge_parquet"
+
+    os.environ["POLARS_MAX_THREADS"] = str(2)
+
+    struct.variants.merge(
+        [
+            DATA_DIR / "no_genotypes.variants.parquet",
+            DATA_DIR / "no_info.variants.parquet",
+        ],
+        out_prefix,
+        append=False,
+        new_variants=None,
+    )
+
+    lf = polars.concat([polars.scan_parquet(entry.path) for entry in os.scandir(out_prefix) if entry.is_file()])
+
+    assert set(lf.collect().get_column("id").to_list()) == MERGE_IDS
+
+    struct.variants.merge(
+        [
+            DATA_DIR / "sv.variants.parquet",
+        ],
+        out_prefix,
+        append=True,
+        new_variants=tmp_path / "new_variants",
+    )
+
+    lf_sv = polars.scan_parquet(DATA_DIR / "sv.variants.parquet")
+    sv_merge = MERGE_IDS | set(lf_sv.collect().get_column("id").to_list())
+
+    lf = polars.concat([polars.scan_parquet(entry.path) for entry in os.scandir(out_prefix) if entry.is_file()])
+
+    assert set(lf.collect().get_column("id").to_list()) == sv_merge
+
+    df_new = polars.concat([polars.read_parquet(tmp_path / "new_variants" / f"{c}.parquet") for c in range(1, 3)])
+
+    assert set(df_new.get_column("id").to_list()) == {11563721263803193596, 10795857969318833547, 16957900545631786665}

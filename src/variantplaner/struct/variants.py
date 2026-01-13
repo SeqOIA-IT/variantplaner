@@ -79,7 +79,7 @@ def __merge_split_unique(paths: list[pathlib.Path], out_prefix: pathlib.Path) ->
 def __merge_unique(paths: list[pathlib.Path], output: pathlib.Path) -> None:
     """Merge multiple parquet file.
 
-    Only one copy of each variants is kept, based on id.
+    Only one copy of each variants is kept, based on 'pos', 'ref', 'alt'.
 
     Args:
         paths: List of file you want chunked.
@@ -96,6 +96,33 @@ def __merge_unique(paths: list[pathlib.Path], output: pathlib.Path) -> None:
     lf.sink_parquet(output)
 
 
+def __merge_append(
+    old: pathlib.Path, new: pathlib.Path, result: pathlib.Path, diff: pathlib.Path | None = None
+) -> None:
+    """Merge two parquet file and perform uniq on variant.
+
+    Only one copy of each variants is kept, based on 'pos', 'ref', 'alt'.
+
+    Args:
+        old: Previous parquet file.
+        new: New parquet file.
+        result: Path where variants is write.
+        diff: Path where variants only new variants are present.
+
+    Returns:
+        None
+    """
+    logger.info(f"{old=} {new=} {result=} {diff=}")
+
+    old_lf = polars.scan_parquet(old)
+    new_lf = polars.scan_parquet(new)
+
+    if diff is not None:
+        new_lf.join(old_lf, on=("pos", "ref", "alt"), how="anti").sink_parquet(diff)
+
+    polars.concat([old_lf, new_lf]).unique(subset=("pos", "ref", "alt")).sink_parquet(result)
+
+
 def merge(
     paths: list[pathlib.Path],
     output_prefix: pathlib.Path,
@@ -103,6 +130,7 @@ def merge(
     polars_threads: int = 4,
     *,
     append: bool,
+    new_variants: pathlib.Path | None,
 ) -> None:
     """Perform merge of multiple parquet variants file in one file.
 
@@ -112,6 +140,8 @@ def merge(
         paths: List of file you want chunked.
         output: Path where variants is written.
         memory_limit: Size of each chunk in bytes.
+        append: if output exist and this set to true new variants are add to previous file
+        new_variants: if append are set to true, variant not present in old file are write in path
 
     Returns:
         None
@@ -137,11 +167,9 @@ def merge(
         chr_names = set().union(*pool.starmap(__merge_split_unique, base_inputs_outputs))
     logger.debug("End split first first file")
 
-    if append and output_prefix.exists():
-        chr_names |= {entry.name.split(".")[0] for entry in os.scandir(output_prefix) if entry.is_file()}
-
     # iterate over chromosme
     logger.debug("Start merge by chromosome")
+    chr2path = {}
     for chr_name in chr_names:
         logger.debug(f"start chromosome: {chr_name}")
 
@@ -153,9 +181,6 @@ def merge(
             for (_, path) in base_inputs_outputs
             if (path / f"{chr_name}.parquet").is_file()
         ]
-
-        if append and (output_prefix / f"{chr_name}.parquet").exists():
-            inputs.append(output_prefix / f"{chr_name}.parquet")
 
         if not inputs:
             continue
@@ -180,9 +205,30 @@ def merge(
             with multiprocessing.get_context("spawn").Pool(multi_threads) as pool:
                 pool.starmap(__merge_unique, inputs_outputs)
 
-        shutil.move(inputs[0], output_prefix / f"{chr_name}.parquet")
+        chr2path[chr_name] = inputs[0]
+
         logger.debug(f"end chromosome: {chr_name}")
     logger.debug("End merge by chromosome")
+
+    if new_variants is not None:
+        new_variants.mkdir(parents=True, exist_ok=True)
+
+    logger.debug("Start finalize merge")
+    for c, p in chr2path.items():
+        out_path = output_prefix / f"{c}.parquet"
+        if append and out_path.exists():
+            logger.debug("Start merge previous variant with new")
+            temp_final_merge = out_path.with_suffix(".parquet.new")
+            __merge_append(
+                out_path, p, temp_final_merge, new_variants / f"{c}.parquet" if new_variants is not None else None
+            )
+            shutil.move(temp_final_merge, out_path)
+            logger.debug("End merge previous variant with new")
+        else:
+            logger.debug(f"start rename chromosome: {c}")
+            shutil.move(p, out_path)
+            logger.debug(f"end rename chromosome: {c}")
+    logger.debug("End finalize merge")
 
     # Call cleanup to remove all tempfile generate durring merging
     logger.debug("Star clean tmp file")

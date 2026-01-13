@@ -176,7 +176,9 @@ def test_hive_column_order(tmp_path: pathlib.Path) -> None:
 
     partition_paths = set(__scantree(tmp_path / "partitions"))
 
-    value = polars.concat([polars.read_parquet(path, hive_partitioning=False).select(column_order) for path in partition_paths])
+    value = polars.concat(
+        [polars.read_parquet(path, hive_partitioning=False).select(column_order) for path in partition_paths]
+    )
 
     truth = polars.concat(
         [
