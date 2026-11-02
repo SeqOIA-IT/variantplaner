@@ -56,7 +56,7 @@ def annotations_extractions_func(data: pandas.DataFrame, _name: str) -> tuple[pa
 
 def vcf2parquet_func(data: pandas.DataFrame, _name: str) -> tuple[pandas.DataFrame, str]:
     """Update dataframe and group name for vcf2parquet group."""
-    data = data.sort_values(by=["method"], key=lambda col: col.apply(lambda x: len(x)))
+    data = data.sort_values(by=["method"], key=lambda col: col.apply(len))
 
     return data, "Vcf2Parquet mode evaluation"
 
