@@ -83,6 +83,7 @@ class Vcf:
             has_header=False,
             schema_overrides=Vcf.schema(),
             new_columns=list(Vcf.schema().keys()),
+            extra_columns="ignore",
         )
 
         schema = self.lf.collect_schema()

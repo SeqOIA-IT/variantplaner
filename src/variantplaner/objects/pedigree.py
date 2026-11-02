@@ -43,6 +43,7 @@ class Pedigree(polars.LazyFrame):
                 "affected",
             ],
             schema_overrides=Pedigree.minimal_schema(),
+            extra_columns="ignore",
         )
 
     def to_path(self, output_path: pathlib.Path) -> None:
