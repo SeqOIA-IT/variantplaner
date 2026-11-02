@@ -176,8 +176,7 @@
 <span class=normal>43</span>
 <span class=normal>44</span>
 <span class=normal>45</span>
-<span class=normal>46</span>
-<span class=normal>47</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>from_path</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>input_path</span><span class=p>:</span> <span class=n>pathlib</span><span class=o>.</span><span class=n>Path</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span><span class=p>:</span>
+<span class=normal>46</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>from_path</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>input_path</span><span class=p>:</span> <span class=n>pathlib</span><span class=o>.</span><span class=n>Path</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span><span class=p>:</span>
 <span class=w>    </span><span class=sd>"""Read a pedigree file in [polars.LazyFrame](https://pola-rs.github.io/polars/py-polars/html/reference/lazyframe/index.html).</span>
 
 <span class=sd>    Args:</span>
@@ -200,10 +199,10 @@
             <span class=s2>"affected"</span><span class=p>,</span>
         <span class=p>],</span>
         <span class=n>schema_overrides</span><span class=o>=</span><span class=n>Pedigree</span><span class=o>.</span><span class=n>minimal_schema</span><span class=p>(),</span>
-        <span class=n>extra_columns</span><span class=o>=</span><span class=s2>"ignore"</span><span class=p>,</span>
     <span class=p>)</span>
 </code></pre></div></td></tr></table></div> </details> </div> </div> <div class="doc doc-object doc-function"> <h3 id=variantplaner.Pedigree.minimal_schema class="doc doc-heading"> <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code> <span class="doc doc-object-name doc-function-name">minimal_schema</span> <span class="doc doc-labels"> <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small> </span> <a href=#variantplaner.Pedigree.minimal_schema class=headerlink title="Permanent link">&para;</a></h3> <div class="doc-signature highlight"><pre><span></span><code><span class=nf>minimal_schema</span><span class=p>()</span> <span class=o>-&gt;</span> <span class=n><a class="autorefs autorefs-external" title="<code>collections.abc.Mapping</code>" href=https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping>Mapping</a></span><span class=p>[</span><span class=n><a class="autorefs autorefs-external" href=https://docs.python.org/3/builtins/stdtypes.html#str>str</a></span><span class=p>,</span> <span class=n><span title=polars._typing.PolarsDataType>PolarsDataType</span></span><span class=p>]</span>
-</code></pre></div> <div class="doc doc-contents "> <p>Get schema of variants polars.LazyFrame.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/pedigree.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>63</span>
+</code></pre></div> <div class="doc doc-contents "> <p>Get schema of variants polars.LazyFrame.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/pedigree.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>62</span>
+<span class=normal>63</span>
 <span class=normal>64</span>
 <span class=normal>65</span>
 <span class=normal>66</span>
@@ -214,8 +213,7 @@
 <span class=normal>71</span>
 <span class=normal>72</span>
 <span class=normal>73</span>
-<span class=normal>74</span>
-<span class=normal>75</span></pre></div></td><td class=code><div><pre><span></span><code><span class=nd>@classmethod</span>
+<span class=normal>74</span></pre></div></td><td class=code><div><pre><span></span><code><span class=nd>@classmethod</span>
 <span class=k>def</span><span class=w> </span><span class=nf>minimal_schema</span><span class=p>(</span>
     <span class=bp>cls</span><span class=p>,</span>
 <span class=p>)</span> <span class=o>-&gt;</span> <span class=n>collections</span><span class=o>.</span><span class=n>abc</span><span class=o>.</span><span class=n>Mapping</span><span class=p>[</span><span class=nb>str</span><span class=p>,</span> <span class=n>polars</span><span class=o>.</span><span class=n>_typing</span><span class=o>.</span><span class=n>PolarsDataType</span><span class=p>]:</span>
@@ -229,7 +227,8 @@
         <span class=s2>"affected"</span><span class=p>:</span> <span class=n>polars</span><span class=o>.</span><span class=n>Boolean</span><span class=p>,</span>
     <span class=p>}</span>
 </code></pre></div></td></tr></table></div> </details> </div> </div> <div class="doc doc-object doc-function"> <h3 id=variantplaner.Pedigree.to_path class="doc doc-heading"> <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code> <span class="doc doc-object-name doc-function-name">to_path</span> <a href=#variantplaner.Pedigree.to_path class=headerlink title="Permanent link">&para;</a></h3> <div class="doc-signature highlight"><pre><span></span><code><span class=nf>to_path</span><span class=p>(</span><span class=n>output_path</span><span class=p>:</span> <span class=n><a class="autorefs autorefs-external" title="<code>pathlib.Path</code>" href=https://docs.python.org/3/library/pathlib.html#pathlib.Path>Path</a></span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span>
-</code></pre></div> <div class="doc doc-contents "> <p>Write pedigree <a href=https://pola-rs.github.io/polars/py-polars/html/reference/lazyframe/index.html>polars.LazyFrame</a> in ped format.</p> <p>Warning: This function performs <a class="autorefs autorefs-external" href=https://pola-rs.github.io/polars/py-polars/html/reference/lazyframe/api/polars.LazyFrame.collect.html#polars.LazyFrame.collect>polars.LazyFrame.collect</a> before write csv, this can have a significant impact on memory usage</p> <p><span class=doc-section-title>Parameters:</span></p> <ul> <li class="doc-section-item field-body"> <b><code>lf</code></b> – <div class=doc-md-description> <p>LazyFrame contains pedigree information.</p> </div> </li> <li class="doc-section-item field-body"> <b><code>output_path</code></b> (<code><a class="autorefs autorefs-external" title="<code>pathlib.Path</code>" href=https://docs.python.org/3/library/pathlib.html#pathlib.Path>Path</a></code>) – <div class=doc-md-description> <p>Path where write pedigree information.</p> </div> </li> </ul> <p><span class=doc-section-title>Returns:</span></p> <ul> <li class="doc-section-item field-body"> <code>None</code> – <div class=doc-md-description> <p>None</p> </div> </li> </ul> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/pedigree.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>49</span>
+</code></pre></div> <div class="doc doc-contents "> <p>Write pedigree <a href=https://pola-rs.github.io/polars/py-polars/html/reference/lazyframe/index.html>polars.LazyFrame</a> in ped format.</p> <p>Warning: This function performs <a class="autorefs autorefs-external" href=https://pola-rs.github.io/polars/py-polars/html/reference/lazyframe/api/polars.LazyFrame.collect.html#polars.LazyFrame.collect>polars.LazyFrame.collect</a> before write csv, this can have a significant impact on memory usage</p> <p><span class=doc-section-title>Parameters:</span></p> <ul> <li class="doc-section-item field-body"> <b><code>lf</code></b> – <div class=doc-md-description> <p>LazyFrame contains pedigree information.</p> </div> </li> <li class="doc-section-item field-body"> <b><code>output_path</code></b> (<code><a class="autorefs autorefs-external" title="<code>pathlib.Path</code>" href=https://docs.python.org/3/library/pathlib.html#pathlib.Path>Path</a></code>) – <div class=doc-md-description> <p>Path where write pedigree information.</p> </div> </li> </ul> <p><span class=doc-section-title>Returns:</span></p> <ul> <li class="doc-section-item field-body"> <code>None</code> – <div class=doc-md-description> <p>None</p> </div> </li> </ul> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/pedigree.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>48</span>
+<span class=normal>49</span>
 <span class=normal>50</span>
 <span class=normal>51</span>
 <span class=normal>52</span>
@@ -240,8 +239,7 @@
 <span class=normal>57</span>
 <span class=normal>58</span>
 <span class=normal>59</span>
-<span class=normal>60</span>
-<span class=normal>61</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>to_path</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>output_path</span><span class=p>:</span> <span class=n>pathlib</span><span class=o>.</span><span class=n>Path</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span><span class=p>:</span>
+<span class=normal>60</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>to_path</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>output_path</span><span class=p>:</span> <span class=n>pathlib</span><span class=o>.</span><span class=n>Path</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span><span class=p>:</span>
 <span class=w>    </span><span class=sd>"""Write pedigree [polars.LazyFrame](https://pola-rs.github.io/polars/py-polars/html/reference/lazyframe/index.html) in ped format.</span>
 
 <span class=sd>    Warning: This function performs [polars.LazyFrame.collect][] before write csv, this can have a significant impact on memory usage</span>
@@ -297,7 +295,8 @@
 
     <span class=bp>self</span><span class=o>.</span><span class=n>header</span> <span class=o>=</span> <span class=n>VcfHeader</span><span class=p>()</span>
 </code></pre></div></td></tr></table></div> </details> <div class="doc doc-children"> <div class="doc doc-object doc-function"> <h3 id=variantplaner.Vcf.add_genotypes class="doc doc-heading"> <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code> <span class="doc doc-object-name doc-function-name">add_genotypes</span> <a href=#variantplaner.Vcf.add_genotypes class=headerlink title="Permanent link">&para;</a></h3> <div class="doc-signature highlight"><pre><span></span><code><span class=nf>add_genotypes</span><span class=p>(</span><span class=n>genotypes_lf</span><span class=p>:</span> <span class=n><a class="autorefs autorefs-internal" href=#variantplaner.Genotypes>Genotypes</a></span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span>
-</code></pre></div> <div class="doc doc-contents "> <p>Add genotypes information in vcf.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>173</span>
+</code></pre></div> <div class="doc doc-contents "> <p>Add genotypes information in vcf.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>172</span>
+<span class=normal>173</span>
 <span class=normal>174</span>
 <span class=normal>175</span>
 <span class=normal>176</span>
@@ -306,8 +305,7 @@
 <span class=normal>179</span>
 <span class=normal>180</span>
 <span class=normal>181</span>
-<span class=normal>182</span>
-<span class=normal>183</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>add_genotypes</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>genotypes_lf</span><span class=p>:</span> <span class=n>Genotypes</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span><span class=p>:</span>
+<span class=normal>182</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>add_genotypes</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>genotypes_lf</span><span class=p>:</span> <span class=n>Genotypes</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span><span class=p>:</span>
 <span class=w>    </span><span class=sd>"""Add genotypes information in vcf."""</span>
     <span class=k>for</span> <span class=n>sample</span> <span class=ow>in</span> <span class=n>genotypes_lf</span><span class=o>.</span><span class=n>samples_names</span><span class=p>():</span>
         <span class=n>geno2sample</span> <span class=o>=</span> <span class=p>(</span>
@@ -321,11 +319,11 @@
 </code></pre></div></td></tr></table></div> </details> </div> </div> <div class="doc doc-object doc-function"> <h3 id=variantplaner.Vcf.annotations class="doc doc-heading"> <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code> <span class="doc doc-object-name doc-function-name">annotations</span> <a href=#variantplaner.Vcf.annotations class=headerlink title="Permanent link">&para;</a></h3> <div class="doc-signature highlight"><pre><span></span><code><span class=nf>annotations</span><span class=p>(</span>
     <span class=n>select_info</span><span class=p>:</span> <span class=n><a class="autorefs autorefs-external" href=https://docs.python.org/3/builtins/stdtypes.html#set>set</a></span><span class=p>[</span><span class=n><a class="autorefs autorefs-external" href=https://docs.python.org/3/builtins/stdtypes.html#str>str</a></span><span class=p>]</span> <span class=o>|</span> <span class=kc>None</span> <span class=o>=</span> <span class=kc>None</span><span class=p>,</span>
 <span class=p>)</span> <span class=o>-&gt;</span> <span class=n><a class="autorefs autorefs-internal" href=#variantplaner.Annotations>Annotations</a></span>
-</code></pre></div> <div class="doc doc-contents "> <p>Get annotations of vcf.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>185</span>
+</code></pre></div> <div class="doc doc-contents "> <p>Get annotations of vcf.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>184</span>
+<span class=normal>185</span>
 <span class=normal>186</span>
 <span class=normal>187</span>
-<span class=normal>188</span>
-<span class=normal>189</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>annotations</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>select_info</span><span class=p>:</span> <span class=nb>set</span><span class=p>[</span><span class=nb>str</span><span class=p>]</span> <span class=o>|</span> <span class=kc>None</span> <span class=o>=</span> <span class=kc>None</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=n>Annotations</span><span class=p>:</span>
+<span class=normal>188</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>annotations</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>select_info</span><span class=p>:</span> <span class=nb>set</span><span class=p>[</span><span class=nb>str</span><span class=p>]</span> <span class=o>|</span> <span class=kc>None</span> <span class=o>=</span> <span class=kc>None</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=n>Annotations</span><span class=p>:</span>
 <span class=w>    </span><span class=sd>"""Get annotations of vcf."""</span>
     <span class=n>lf</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>lf</span><span class=o>.</span><span class=n>with_columns</span><span class=p>(</span><span class=bp>self</span><span class=o>.</span><span class=n>lf</span><span class=o>.</span><span class=n>header</span><span class=o>.</span><span class=n>info_parser</span><span class=p>(</span><span class=n>select_info</span><span class=p>))</span>
 
@@ -377,8 +375,7 @@
 <span class=normal> 98</span>
 <span class=normal> 99</span>
 <span class=normal>100</span>
-<span class=normal>101</span>
-<span class=normal>102</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>from_path</span><span class=p>(</span>
+<span class=normal>101</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>from_path</span><span class=p>(</span>
     <span class=bp>self</span><span class=p>,</span>
     <span class=n>path</span><span class=p>:</span> <span class=n>pathlib</span><span class=o>.</span><span class=n>Path</span><span class=p>,</span>
     <span class=n>chr2len_path</span><span class=p>:</span> <span class=n>pathlib</span><span class=o>.</span><span class=n>Path</span> <span class=o>|</span> <span class=kc>None</span><span class=p>,</span>
@@ -405,7 +402,6 @@
         <span class=n>has_header</span><span class=o>=</span><span class=kc>False</span><span class=p>,</span>
         <span class=n>schema_overrides</span><span class=o>=</span><span class=n>Vcf</span><span class=o>.</span><span class=n>schema</span><span class=p>(),</span>
         <span class=n>new_columns</span><span class=o>=</span><span class=nb>list</span><span class=p>(</span><span class=n>Vcf</span><span class=o>.</span><span class=n>schema</span><span class=p>()</span><span class=o>.</span><span class=n>keys</span><span class=p>()),</span>
-        <span class=n>extra_columns</span><span class=o>=</span><span class=s2>"ignore"</span><span class=p>,</span>
     <span class=p>)</span>
 
     <span class=n>schema</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>lf</span><span class=o>.</span><span class=n>collect_schema</span><span class=p>()</span>
@@ -423,7 +419,8 @@
     <span class=k>if</span> <span class=n>behavior</span> <span class=o>&amp;</span> <span class=n>VcfParsingBehavior</span><span class=o>.</span><span class=n>MANAGE_SV</span><span class=p>:</span>
         <span class=bp>self</span><span class=o>.</span><span class=n>lf</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>lf</span><span class=o>.</span><span class=n>drop</span><span class=p>(</span><span class=s2>"SVTYPE"</span><span class=p>,</span> <span class=s2>"SVLEN"</span><span class=p>,</span> <span class=n>strict</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
 </code></pre></div></td></tr></table></div> </details> </div> </div> <div class="doc doc-object doc-function"> <h3 id=variantplaner.Vcf.genotypes class="doc doc-heading"> <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code> <span class="doc doc-object-name doc-function-name">genotypes</span> <a href=#variantplaner.Vcf.genotypes class=headerlink title="Permanent link">&para;</a></h3> <div class="doc-signature highlight"><pre><span></span><code><span class=nf>genotypes</span><span class=p>()</span> <span class=o>-&gt;</span> <span class=n><a class="autorefs autorefs-internal" href=#variantplaner.Genotypes>Genotypes</a></span>
-</code></pre></div> <div class="doc doc-contents "> <p>Get genotype of vcf.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>112</span>
+</code></pre></div> <div class="doc doc-contents "> <p>Get genotype of vcf.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>111</span>
+<span class=normal>112</span>
 <span class=normal>113</span>
 <span class=normal>114</span>
 <span class=normal>115</span>
@@ -481,8 +478,7 @@
 <span class=normal>167</span>
 <span class=normal>168</span>
 <span class=normal>169</span>
-<span class=normal>170</span>
-<span class=normal>171</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>genotypes</span><span class=p>(</span><span class=bp>self</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=n>Genotypes</span><span class=p>:</span>
+<span class=normal>170</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>genotypes</span><span class=p>(</span><span class=bp>self</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=n>Genotypes</span><span class=p>:</span>
 <span class=w>    </span><span class=sd>"""Get genotype of vcf."""</span>
     <span class=n>schema</span> <span class=o>=</span> <span class=bp>self</span><span class=o>.</span><span class=n>lf</span><span class=o>.</span><span class=n>collect_schema</span><span class=p>()</span>
 
@@ -543,7 +539,8 @@
 
     <span class=k>return</span> <span class=n>genotypes</span>
 </code></pre></div></td></tr></table></div> </details> </div> </div> <div class="doc doc-object doc-function"> <h3 id=variantplaner.Vcf.schema class="doc doc-heading"> <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code> <span class="doc doc-object-name doc-function-name">schema</span> <span class="doc doc-labels"> <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small> </span> <a href=#variantplaner.Vcf.schema class=headerlink title="Permanent link">&para;</a></h3> <div class="doc-signature highlight"><pre><span></span><code><span class=nf>schema</span><span class=p>()</span> <span class=o>-&gt;</span> <span class=n><a class="autorefs autorefs-external" title="<code>collections.abc.Mapping</code>" href=https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping>Mapping</a></span><span class=p>[</span><span class=n><a class="autorefs autorefs-external" href=https://docs.python.org/3/builtins/stdtypes.html#str>str</a></span><span class=p>,</span> <span class=n><span title=polars._typing.PolarsDataType>PolarsDataType</span></span><span class=p>]</span>
-</code></pre></div> <div class="doc doc-contents "> <p>Get schema of Vcf polars.LazyFrame.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>191</span>
+</code></pre></div> <div class="doc doc-contents "> <p>Get schema of Vcf polars.LazyFrame.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>190</span>
+<span class=normal>191</span>
 <span class=normal>192</span>
 <span class=normal>193</span>
 <span class=normal>194</span>
@@ -554,8 +551,7 @@
 <span class=normal>199</span>
 <span class=normal>200</span>
 <span class=normal>201</span>
-<span class=normal>202</span>
-<span class=normal>203</span></pre></div></td><td class=code><div><pre><span></span><code><span class=nd>@classmethod</span>
+<span class=normal>202</span></pre></div></td><td class=code><div><pre><span></span><code><span class=nd>@classmethod</span>
 <span class=k>def</span><span class=w> </span><span class=nf>schema</span><span class=p>(</span><span class=bp>cls</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=n>collections</span><span class=o>.</span><span class=n>abc</span><span class=o>.</span><span class=n>Mapping</span><span class=p>[</span><span class=nb>str</span><span class=p>,</span> <span class=n>polars</span><span class=o>.</span><span class=n>_typing</span><span class=o>.</span><span class=n>PolarsDataType</span><span class=p>]:</span>
 <span class=w>    </span><span class=sd>"""Get schema of Vcf polars.LazyFrame."""</span>
     <span class=k>return</span> <span class=p>{</span>
@@ -569,15 +565,15 @@
         <span class=s2>"info"</span><span class=p>:</span> <span class=n>polars</span><span class=o>.</span><span class=n>String</span><span class=p>,</span>
     <span class=p>}</span>
 </code></pre></div></td></tr></table></div> </details> </div> </div> <div class="doc doc-object doc-function"> <h3 id=variantplaner.Vcf.set_variants class="doc doc-heading"> <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code> <span class="doc doc-object-name doc-function-name">set_variants</span> <a href=#variantplaner.Vcf.set_variants class=headerlink title="Permanent link">&para;</a></h3> <div class="doc-signature highlight"><pre><span></span><code><span class=nf>set_variants</span><span class=p>(</span><span class=n>variants</span><span class=p>:</span> <span class=n><a class="autorefs autorefs-internal" href=#variantplaner.Variants>Variants</a></span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span>
-</code></pre></div> <div class="doc doc-contents "> <p>Set variants of vcf.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>108</span>
-<span class=normal>109</span>
-<span class=normal>110</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>set_variants</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>variants</span><span class=p>:</span> <span class=n>Variants</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span><span class=p>:</span>
+</code></pre></div> <div class="doc doc-contents "> <p>Set variants of vcf.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>107</span>
+<span class=normal>108</span>
+<span class=normal>109</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>set_variants</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>variants</span><span class=p>:</span> <span class=n>Variants</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=kc>None</span><span class=p>:</span>
 <span class=w>    </span><span class=sd>"""Set variants of vcf."""</span>
     <span class=bp>self</span><span class=o>.</span><span class=n>lf</span> <span class=o>=</span> <span class=n>variants</span><span class=o>.</span><span class=n>lf</span>
 </code></pre></div></td></tr></table></div> </details> </div> </div> <div class="doc doc-object doc-function"> <h3 id=variantplaner.Vcf.variants class="doc doc-heading"> <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code> <span class="doc doc-object-name doc-function-name">variants</span> <a href=#variantplaner.Vcf.variants class=headerlink title="Permanent link">&para;</a></h3> <div class="doc-signature highlight"><pre><span></span><code><span class=nf>variants</span><span class=p>()</span> <span class=o>-&gt;</span> <span class=n><a class="autorefs autorefs-internal" href=#variantplaner.Variants>Variants</a></span>
-</code></pre></div> <div class="doc doc-contents "> <p>Get variants of vcf.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>104</span>
-<span class=normal>105</span>
-<span class=normal>106</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>variants</span><span class=p>(</span><span class=bp>self</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=n>Variants</span><span class=p>:</span>
+</code></pre></div> <div class="doc doc-contents "> <p>Get variants of vcf.</p> <details class=mkdocstrings-source> <summary>Source code in <code>src/variantplaner/objects/vcf.py</code></summary> <div class=highlight><table class=highlighttable><tr><td class=linenos><div class=linenodiv><pre><span></span><span class=normal>103</span>
+<span class=normal>104</span>
+<span class=normal>105</span></pre></div></td><td class=code><div><pre><span></span><code><span class=k>def</span><span class=w> </span><span class=nf>variants</span><span class=p>(</span><span class=bp>self</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=n>Variants</span><span class=p>:</span>
 <span class=w>    </span><span class=sd>"""Get variants of vcf."""</span>
     <span class=k>return</span> <span class=bp>self</span><span class=o>.</span><span class=n>lf</span><span class=o>.</span><span class=n>select</span><span class=p>(</span><span class=n>Variants</span><span class=o>.</span><span class=n>minimal_schema</span><span class=p>()</span><span class=o>.</span><span class=n>keys</span><span class=p>())</span>
 </code></pre></div></td></tr></table></div> </details> </div> </div> </div> </div> </div> <div class="doc doc-object doc-class"> <h2 id=variantplaner.VcfHeader class="doc doc-heading"> <code class="doc-symbol doc-symbol-heading doc-symbol-class"></code> <span class="doc doc-object-name doc-class-name">VcfHeader</span> <a href=#variantplaner.VcfHeader class=headerlink title="Permanent link">&para;</a></h2> <div class="doc-signature highlight"><pre><span></span><code><span class=nf>VcfHeader</span><span class=p>()</span>
