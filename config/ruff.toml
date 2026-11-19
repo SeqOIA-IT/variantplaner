@@ -72,10 +72,12 @@ ignore = [
     "PLR0912",  # Too many branches
     "PLR0913",  # Too many arguments to function call
     "PLR0915",  # Too many statements
+    "PLR0917",
     "SLF001", # Private member accessed
     "TRY003",  # Avoid specifying long messages outside the exception class
     "ICN001",  # Don't short polars name in import
     "ISC001",  # Single line implicit string concatenation (ruff formater recommendation)
+    "PT028",
 ]
 
 [lint.per-file-ignores]

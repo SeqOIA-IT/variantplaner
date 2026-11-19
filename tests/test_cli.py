@@ -361,7 +361,31 @@ def test_parquet2vcf(tmp_path: pathlib.Path) -> None:
 
     assert result.exit_code == 0, result.output
 
-    filecmp.cmp(variants_path, DATA_DIR / "no_info.parquet2vcf.vcf")
+    assert filecmp.cmp(variants_path, DATA_DIR / "no_info.parquet2vcf.vcf")
+
+
+def test_parquet2vcf_with_chrprefix(tmp_path: pathlib.Path) -> None:
+    """parquet2vcf run with chrprefix."""
+    variants_path = tmp_path / "variants.vcf"
+
+    runner = CliRunner()
+    result = runner.invoke(
+        cli.main,
+        [
+            "-v",
+            "parquet2vcf",
+            "-C",
+            "chr",
+            "-v",
+            str(DATA_DIR / "no_info.parquet"),
+            "-o",
+            str(variants_path),
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+
+    assert filecmp.cmp(variants_path, DATA_DIR / "no_info.parquet2vcf_prefix.vcf")
 
 
 def test_parquet2vcf_add_genotype(tmp_path: pathlib.Path) -> None:

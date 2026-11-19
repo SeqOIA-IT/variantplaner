@@ -36,6 +36,12 @@ from variantplaner import Genotypes, Variants, Vcf, cli, io
     required=True,
 )
 @click.option(
+    "-C",
+    "--prefix-chr",
+    help="Add this prefix before chromosome name in vcf",
+    type=str,
+)
+@click.option(
     "-g",
     "--genotypes-path",
     help="Path to genotype parquet.",
@@ -126,6 +132,7 @@ from variantplaner import Genotypes, Variants, Vcf, cli, io
 def parquet2vcf(
     variants_path: pathlib.Path,
     output_path: pathlib.Path,
+    prefix_chr: str | None = None,
     genotypes_path: pathlib.Path | None = None,
     headers_path: pathlib.Path | None = None,
     select_chromosome: str | None = None,
@@ -142,7 +149,7 @@ def parquet2vcf(
     logger = logging.getLogger("vcf2parquet")
 
     logger.debug(
-        f"parameter: {variants_path=} {output_path=} {genotypes_path=} {headers_path=} {chromosome=} {position=} {identifier=} {reference=} {alternative=} {quality=} {filter_col=} {format_str=}"
+        f"parameter: {variants_path=} {output_path=} {prefix_chr=} {genotypes_path=} {headers_path=} {chromosome=} {position=} {identifier=} {reference=} {alternative=} {quality=} {filter_col=} {format_str=}"
     )
 
     vcf = Vcf()
@@ -192,6 +199,7 @@ def parquet2vcf(
     io.vcf.lazyframe_in_vcf(
         vcf.lf,
         output_path,
+        chrom_prefix=prefix_chr,
         vcf_header=headers,
         renaming=rename_column,
     )

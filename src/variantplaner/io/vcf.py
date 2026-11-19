@@ -100,6 +100,7 @@ def lazyframe_in_vcf(
     lf: polars.LazyFrame,
     output_path: pathlib.Path,
     /,
+    chrom_prefix: str | None = None,
     vcf_header: VcfHeader | None = None,
     renaming: RenameCol = DEFAULT_RENAME,
 ) -> None:
@@ -127,6 +128,9 @@ def lazyframe_in_vcf(
     )
 
     select_column.extend(["#CHROM", "POS", "ID", "REF", "ALT"])
+
+    if chrom_prefix is not None:
+        lf = lf.with_columns((polars.lit(chrom_prefix) + polars.col("#CHROM")).alias("#CHROM"))
 
     if vcf_header is None:
         header = __generate_header(lf, renaming["INFO"], list(renaming["sample"].keys()), renaming["FORMAT"])
@@ -274,7 +278,7 @@ def __generate_header(
     return header
 
 
-def __lazy2format(sample_name: str, format_string: str, col2type: dict[str, polars.PolarsDataType]) -> polars.Expr:
+def __lazy2format(sample_name: str, format_string: str, col2type: dict[str, typing.Any]) -> polars.Expr:
     """Use sample name and column name to build sample column."""
     expression = []
 

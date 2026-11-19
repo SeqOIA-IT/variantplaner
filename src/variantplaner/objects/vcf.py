@@ -87,7 +87,7 @@ class Vcf:
 
         schema = self.lf.collect_schema()
         self.lf = self.lf.rename(dict(zip(schema.names(), self.header.column_name(schema.len()))))
-        self.lf = self.lf.cast(Vcf.schema())
+        self.lf = self.lf.cast(Vcf.schema())  # type: ignore[arg-type]
 
         if behavior & VcfParsingBehavior.MANAGE_SV:
             self.lf = self.lf.with_columns(self.header.info_parser({"SVTYPE", "SVLEN"}))
@@ -188,15 +188,15 @@ class Vcf:
         return lf.drop("chr", "pos", "ref", "alt", "format", "info")
 
     @classmethod
-    def schema(cls) -> collections.abc.Mapping[str, polars._typing.PolarsDataType]:
+    def schema(cls) -> collections.abc.Mapping[str, typing.Any]:
         """Get schema of Vcf polars.LazyFrame."""
         return {
-            "chr": polars.String,
-            "pos": polars.UInt64,
-            "vid": polars.String,
-            "ref": polars.String,
-            "alt": polars.String,
-            "qual": polars.String,
-            "filter": polars.String,
-            "info": polars.String,
+            "chr": polars.datatypes.String,
+            "pos": polars.datatypes.UInt64,
+            "vid": polars.datatypes.String,
+            "ref": polars.datatypes.String,
+            "alt": polars.datatypes.String,
+            "qual": polars.datatypes.String,
+            "filter": polars.datatypes.String,
+            "info": polars.datatypes.String,
         }

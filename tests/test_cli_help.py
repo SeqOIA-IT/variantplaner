@@ -137,6 +137,7 @@ def test_show_help_parquet2vcf() -> None:
 Options:
   -v, --variants-path FILE      Path to variant parquet.  [required]
   -o, --output-path FILE        Path where the vcf is written.  [required]
+  -C, --prefix-chr TEXT         Add this prefix before chromosome name in vcf
   -g, --genotypes-path FILE     Path to genotype parquet.
   -H, --headers-path FILE       Path to vcf header.
   -s, --select-chromosome TEXT  Output only record where chromosome match target
