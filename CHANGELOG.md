@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.5.3](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.5.3) - 2026-11-19
+
+<small>[Compare with 0.5.2](https://github.com/SeqOIA-IT/variantplaner/compare/0.5.2...0.5.3)</small>
+
+### Bug Fixes
+
+- add a parameter to add prefix of chromosome in parquet2vcf command ([3b6acbe](https://github.com/SeqOIA-IT/variantplaner/commit/3b6acbe82ec2dc16bcb89fbf15bde2e7d3f74b52) by Pierre Marijon).
+- ci value ([e8101b4](https://github.com/SeqOIA-IT/variantplaner/commit/e8101b4b6c31bcbcf92a3fd06c003ec2cbdfe007) by Pierre Marijon).
+- don't use version 2 of polars ([9071900](https://github.com/SeqOIA-IT/variantplaner/commit/9071900b219deb14ac8aa086c6dbeb0d7daee0c7) by Pierre Marijon).
+- error in vcf parsing ([e300e5f](https://github.com/SeqOIA-IT/variantplaner/commit/e300e5faa734026a70a4c906a5d54bb5607aa50d) by Pierre Marijon).
+
 ## [0.5.2](https://github.com/SeqOIA-IT/variantplaner/releases/tag/0.5.2) - 2025-07-24
 
 <small>[Compare with 0.5.1](https://github.com/SeqOIA-IT/variantplaner/compare/0.5.1...0.5.2)</small>

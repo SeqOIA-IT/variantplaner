@@ -11,7 +11,7 @@ Nothing easier!
 >
 > After install pyenv run:
 > ```bash
-> pyenv install 3.9 3.10 3.11
+> pyenv install 3.12 3.13 3.14
 > ```
 
 Fork and clone the repository, then:
